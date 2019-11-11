@@ -17,17 +17,19 @@
       </el-form-item>
     </el-form>
 
-    <el-table :data="list" border stripe style="width:801px" size="small">
+    <el-table :data="list" border stripe style="width:1001px" size="small">
       <el-table-column prop="id" label="编号" width="200" align="center">
       </el-table-column>
 
       <el-table-column prop="icon" label="分类logo" width="200" align="center">
         <template slot-scope="scope">
-          <img :src="scope.row.icon" style="max-width:50px;max-height:50px;" />
+          <img :src="scope.row.image" style="max-width:50px;max-height:50px;" />
         </template>
       </el-table-column>
 
       <el-table-column prop="title" label="名称" width="200" align="center">
+      </el-table-column>
+      <el-table-column prop="parent" label="上级" width="200" align="center">
       </el-table-column>
 
 
@@ -54,9 +56,14 @@
 
 
 
-      <el-form-item label="分类名称：">
+      <el-form-item label="分类标题：">
         <el-input v-model="newadv.title" style="max-width: 300px;" placeholder="请输入分类名称"></el-input>
       </el-form-item>
+      <el-form-item label="上级分类：" prop="type_id">
+          <el-select v-model="type_id" placeholder="请选择分类">
+            <el-option v-for="item in typeArr" :label="item.title" :value="item.id" :key="item.id"></el-option>
+          </el-select>
+        </el-form-item>
 
       <el-form-item label="分类logo：">
         <el-upload class="upload-demo" :action="upurl" :data="uptoken" :before-upload="beforeUpload" :on-success="handleSuccess" :show-file-list="false" accept="image/*">
@@ -64,6 +71,18 @@
           <el-button size="small" type="primary" style="display: block;margin-top: 20px;">选取文件</el-button>
           <div slot="tip" class="el-upload__tip">可上传JPG/PNG文件，且大小不超过1M，建议图片长宽比为1:1</div>
         </el-upload>
+      </el-form-item>
+       <!-- <el-form-item label="详情：" prop="detail">
+     <el-input type="textarea" :rows="5"></el-input>
+  </el-form-item> -->
+  
+  <el-form-item label="详细内容:" prop="desc" style="margin-bottom: 40px">
+        <div class="edit_container">
+          <quill-editor v-model="newadv.desc" style="height:450px;" ref="myQuillEditor" :options="editorOption" class="editer" placeholder= '请输入详细内容'></quill-editor>
+          <el-upload class="avatar-uploader quill-img" :action="upurl" :data="uptoken" :on-success='quillImgSuccess' style="display: none">
+            <el-button size="small" type="primary" id="imgInput" element-loading-text="插入中,请稍候">点击上传</el-button>
+          </el-upload>
+        </div>
       </el-form-item>
 
       <el-form-item style="margin-left: calc(50% - 200px);">
@@ -93,12 +112,17 @@
 
 
   import { typeGet } from '../../api/api';
+  import { typeAllGet } from '../../api/api';
   import { typePost } from '../../api/api';
   import { typeDel } from '../../api/api';
 
   import qiniu from '../../api/qiniu';
 
   import { Message } from 'element-ui';
+  import 'quill/dist/quill.core.css';
+  import 'quill/dist/quill.snow.css';
+  import 'quill/dist/quill.bubble.css';
+    import { quillEditor } from 'vue-quill-editor' //调用编辑器
 
   export default {
     data() {
@@ -122,22 +146,74 @@
         newadv:{
          title:'',
          icon:'',
+         desc:'',
        },
+
+       typeArr:[],
+       type_id:'',
 
        diatitle:'新增分类',
 
        editId:'',
        delId:'',
 
+editorOption:{
+          placeholder: '请输入详细内容（添加图片请点击上方第一个按钮）',
+          theme: 'snow',
+          modules: {
+            toolbar: {
+              container: [
+              ['image'],
+              ['bold', 'italic', 'underline', 'strike','blockquote', 'code-block'],
+              [{ 'direction': 'rtl' }],
+              [{ 'size': ['small', false, 'large', 'huge'] }],
+              [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+              [{ 'color': [] }, { 'background': [] }],
+              [{ 'font': [] }],
+              [{ 'align': [] }],
+              // ['clean']
+              ],
+              handlers: {
+                'image': function (value) {
+                  if (value) {
+                    document.querySelector('.quill-img input').click()
+                  } else {
+                    this.quill.format('image', false);
+                  }
+                }
+              }
+            }
+          }
+        },
      };
    },
+   components: {
+      quillEditor,
+    },
 
    methods:{
 
+quillImgSuccess(res, file) {
+        console.log(res)
+        let quill = this.$refs.myQuillEditor.quill
+        if (res.key) {
+          let length = quill.getSelection().index;
+          quill.insertEmbed(length, 'image', qiniu.showurl+ res.key)
+          quill.setSelection(length + 1)
+        } else {
+          this.$message.error('图片插入失败')
+        }
+      },
 
     getlist(){
       var allParams = '?page='+ this.currentPage + '&limit=' + this.limit;
       typeGet(allParams).then((res) => {
+        this.typeArr = res.data.data;
+      });
+    },
+    getalllist(){
+      var allParams = '?page='+ this.currentPage + '&limit=' + this.limit;
+      typeAllGet(allParams).then((res) => {
         this.list=res.data.data;
         this.count=res.data.count
       });
@@ -189,11 +265,15 @@
           title:this.newadv.title,
           id:this.editId,
           icon:this.imgSrc,
+          description:this.newadv.desc,
+          parent_id:this.type_id
         };
       }else{
         var allParams = {
           title:this.newadv.title,
           icon:this.imgSrc,
+          description:this.newadv.desc,
+          parent_id:this.type_id
         };
       }
       typePost(allParams).then((res) => {
@@ -215,13 +295,17 @@
   },
 
   handleEdit(index, row){
+    console.log(row);
     this.diatitle='编辑分类';
     this.dialogNewVisible = true;
     this.putorup='put';
     this.editId = row.id;
-    this.imgSrc=row.icon;
+    this.imgSrc=row.image;
     this.newadv.icon=row.icon;
-    this.newadv.title=row.title
+    this.newadv.title=row.title;
+    this.newadv.desc=row.description;
+    this.desc = row.description;
+    this.type_id = row.parent_id;
   },
 
   handleDelete(index, row) {
@@ -262,6 +346,7 @@
 
 mounted: function () {
   this.getlist();
+  this.getalllist();
 }
 }
 </script>

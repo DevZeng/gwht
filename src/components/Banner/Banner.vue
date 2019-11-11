@@ -17,7 +17,7 @@
         </el-form-item>
       </el-form>
 
-      <el-table :data="list" border stripe size="small" style="width:1001px">
+      <el-table :data="list" border stripe size="small" style="width:801px">
         <el-table-column prop="id" label="轮播编号" width="200" align="center">
         </el-table-column>
         <el-table-column prop="href" label="轮播图片" width="300" align="center">
@@ -26,8 +26,8 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="group_id" label="拼团id" width="200" align="center">
-        </el-table-column>
+        <!-- <el-table-column prop="group_id" label="拼团id" width="200" align="center">
+        </el-table-column> -->
 
         <el-table-column label="操作" width="300" align="center">
          <template slot-scope="scope">

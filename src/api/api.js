@@ -62,7 +62,7 @@ axios.interceptors.response.use(
 	})
 
 
-let hosturl ='https://yun.fengniaotuangou.cn'
+let hosturl ='http://localhost/HomePage/public'
 
 let base = hosturl
 
@@ -86,6 +86,7 @@ export const advertDel = params => { return axios.get(`${base}/del/banner`+`${pa
 
 //分类
 export const typeGet = params => { return axios.get(`${base}/types`+`${params}`).then(res => res.data)}
+export const typeAllGet = params => { return axios.get(`${base}/all/types`+`${params}`).then(res => res.data)}
 
 export const typePost = params => { return axios.post(`${base}/type`, params).then(res => res.data)}
 
@@ -168,8 +169,10 @@ export const documentPost = params => { return axios.post(`${base}/document`, pa
 
 // export const documentDel = params => { return axios.get(`${base}/del/document`+`${params}`).then(res => res.data)}
 
+//动态管理
+export const momentsGet = params => { return axios.get(`${base}/moments`+`${params}`).then(res => res.data)}
 
-
+export const momentPost = params => { return axios.post(`${base}/moment`, params).then(res => res.data)}
 
 
 

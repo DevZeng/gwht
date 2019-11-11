@@ -14,55 +14,65 @@
 
       <el-tabs v-model="activeName" type="card">
 
-        <el-tab-pane label="吸粉红包" name="hongbao">
-          <el-form ref="hongbao" :model="hongbao" label-width="120px" :rules="rules">
-            <el-form-item label="最低金额：" prop="minprice">
-              <el-input min="1" type="number" style="width: 300px;" v-model="hongbao.minprice" placeholder="请输入最低金额"><template slot="append">最低为1</template></el-input>
+        <el-tab-pane label="基础信息" name="hongbao">
+          <el-form label-width="120px"  >
+            <el-form-item label="邮箱：" prop="email">
+              <el-input  type="text" style="width: 400px;" v-model="email" placeholder="请输入邮箱"></el-input>
             </el-form-item>
-            <el-form-item label="最高金额：" prop="maxprice">
-              <el-input min="1" type="number" style="width: 300px;" v-model="hongbao.maxprice" placeholder="请输入最高金额"></el-input>
+            <el-form-item label="电话：" prop="phone">
+              <el-input  type="text" style="width: 400px;" v-model="phone" placeholder="请输入电话"></el-input>
             </el-form-item>
-            <el-form-item label="人数：" prop="num">
-              <el-input min="1" max="5" type="number" style="width: 300px;" v-model="hongbao.num" placeholder="请输入人数"><template slot="append">0为关闭红包</template></el-input>
+            <el-form-item label="零售购买：" prop="buy">
+              <el-input  type="text" style="width: 400px;" v-model="buy" placeholder="请输入零售购买"></el-input>
+            </el-form-item>
+            <el-form-item label="工程购买：" prop="eng_buy">
+              <el-input  type="text" style="width: 400px;" v-model="eng_buy" placeholder="请输入工程购买"></el-input>
+            </el-form-item>
+            <el-form-item label="商务合作：" prop="bussiness">
+              <el-input   type="text" style="width: 400px;" v-model="bussiness" placeholder="请输入商务合作"></el-input>
+            </el-form-item>
+            <el-form-item label="媒体合作：" prop="media">
+              <el-input  type="text" style="width: 400px;" v-model="media" placeholder="请输入媒体合作"></el-input>
             </el-form-item>
           </el-form>
           <el-button type="primary" class="postbtn" size="small" @click="savehb()">提交</el-button>
         </el-tab-pane>
 
-        <el-tab-pane label="首页红包图" name="bgpic">
-         <el-upload class="upload-demo" :action="upurl" :data="uptoken" :on-success="bgSuccess" :show-file-list="false" accept="image/*">
-          <img :src="loginbg" class="pre-img" style="width:400px;height:434px;border:1px dashed #ccc;border-radius:6px;display: block;margin-top: 1px;">
-        </el-upload>
+        <el-tab-pane label="微信公众号" name="bgpic">
+         <el-upload class="upload-demo" :action="upurl" :data="uptoken" :on-success="linkSuccess1" :show-file-list="false" accept="image/*">
+        <img :src="wechat_bg" class="pre-img" style="width:200px;height:200px;border:1px dashed #ccc;border-radius:6px;display: block;margin-top: 1px;">
+      </el-upload>
+
+      <el-input v-model="wechat_title" placeholder="请输入标题" style="margin-top:10px;width: 300px;display: block;"></el-input>
         <el-button type="primary" class="postbtn" size="small" @click="savebg()">提交</el-button>
       </el-tab-pane>
 
 
 
-      <el-tab-pane label="分享海报" name="sharebg">
-        <el-upload class="upload-demo" :action="upurl" :data="uptoken" :on-success="shareSuccess" :show-file-list="false" accept="image/*">
-          <img :src="sharebg" class="pre-img" style="width:180px;height:320px;display: block;margin-top: 1px;border:1px dashed #ccc;">
-        </el-upload>
+      <el-tab-pane label="Instagram" name="sharebg">
+        <el-upload class="upload-demo" :action="upurl" :data="uptoken" :on-success="linkSuccess2" :show-file-list="false" accept="image/*">
+        <img :src="ins_bg" class="pre-img" style="width:200px;height:200px;border:1px dashed #ccc;border-radius:6px;display: block;margin-top: 1px;">
+      </el-upload>
+
+      <el-input v-model="ins_title" placeholder="请输入标题" style="margin-top:10px;width: 300px;display: block;"></el-input>
         <el-button type="primary" class="postbtn" size="small" @click="saveshare()">提交</el-button>
       </el-tab-pane>
 
 
 
-      <el-tab-pane label="分享链接" name="sharepic">
-       <el-upload class="upload-demo" :action="upurl" :data="uptoken" :on-success="linkSuccess" :show-file-list="false" accept="image/*">
-        <img :src="sharepic" class="pre-img" style="width:200px;height:160px;border:1px dashed #ccc;border-radius:6px;display: block;margin-top: 1px;">
+      <el-tab-pane label="微博" name="sharepic">
+       <el-upload class="upload-demo" :action="upurl" :data="uptoken" :on-success="linkSuccess3" :show-file-list="false" accept="image/*">
+        <img :src="weibo_bg" class="pre-img" style="width:200px;height:200px;border:1px dashed #ccc;border-radius:6px;display: block;margin-top: 1px;">
       </el-upload>
 
-      <el-input v-model="sharetitle" placeholder="请输入分享标题" style="margin-top:10px;width: 300px;display: block;"></el-input>
+      <el-input v-model="weibo_title" placeholder="请输入标题" style="margin-top:10px;width: 300px;display: block;"></el-input>
 
       <el-button type="primary" class="postbtn" size="small" @click="savelink()">提交</el-button>
     </el-tab-pane>
 
 
 
-    <el-tab-pane label="佣金发放时间" name="brokerage_type">
-      <el-switch v-model="brokerage_type" active-value="1" inactive-value="2" active-text="成团发放" inactive-text="核销发放" @change="schange">
-      </el-switch>
-    </el-tab-pane>
+    
 
 
 
@@ -127,18 +137,14 @@
 
       sharepic:"../static/images/default.png",
       sharetitle:'',
-
-      hongbao:{
-        minprice:'',
-        maxprice:'',
-        num:''
-      },
-
-      rules: {
-        minprice: [{required: true, trigger: 'blur',validator: checkvalue}],
-        maxprice: [{required: true, trigger: 'blur',validator: checkvalue}],
-        num: [{required: true, trigger: 'blur',message: '请输入人数'}],
-      },
+      email :'',
+phone :'',buy :'',eng_buy :'',bussiness :'',media :'',
+wechat_title:'',
+wechat_bg:'',
+ins_title:'',
+ins_bg:'',
+weibo_title:'',
+weibo_bg:'',
 
       switch:0,
 
@@ -175,7 +181,8 @@
 
     savebg(){
       var allParams={
-        loginbg:this.loginbg
+        wechat_title:this.wechat_title,
+        wechat_bg:this.wechat_bg
       }
       baseset(allParams).then((res) => {
         if (res.msg === "ok") {
@@ -199,7 +206,8 @@
 
     saveshare(){
       var allParams={
-        sharebg:this.sharebg,
+        ins_bg:this.ins_bg,
+        ins_title:this.ins_title
       }
       baseset(allParams).then((res) => {
         if (res.msg === "ok") {
@@ -223,18 +231,20 @@
     linkSuccess(res, file){
       this.sharepic = qiniu.showurl+ res.key
     },
+    linkSuccess1(res, file){
+      this.wechat_bg = qiniu.showurl+ res.key
+    },
+    linkSuccess2(res, file){
+      this.ins_bg = qiniu.showurl+ res.key
+    },
+    linkSuccess3(res, file){
+      this.weibo_bg = qiniu.showurl+ res.key
+    },
 
     savelink(){
-      if(this.sharetitle==''){
-        this.$message({
-          message: '请输入分享标题',
-          type: 'error'
-        });
-        return
-      }
       var allParams={
-        sharepic:this.sharepic,
-        sharetitle:this.sharetitle
+        weibo_bg:this.weibo_bg,
+        weibo_title:this.weibo_title
       }
       baseset(allParams).then((res) => {
         if (res.msg === "ok") {
@@ -253,12 +263,10 @@
     },
 
     savehb(){
-      this.$refs.hongbao.validate((valid) => {
-        if (valid) {
-          var allParams={
-            minprice:this.hongbao.minprice,
-            maxprice:this.hongbao.maxprice,
-            num:this.hongbao.num
+      var allParams={
+            email:this.email,
+            phone:this.phone,
+            buy :this.buy,eng_buy :this.eng_buy,bussiness :this.bussiness,media :this.media,
           }
           baseset(allParams).then((res) => {
             if (res.msg === "ok") {
@@ -274,10 +282,6 @@
             });
            }
          });
-        }else{
-          return false;
-        }
-      })
     },
 
 
@@ -286,18 +290,18 @@
       baseget(allParams).then((res) => {
         if (res.msg === "ok") {
 
-          this.sharepic=res.data.sharepic
-          this.sharetitle=res.data.sharetitle
-
-
-          this.loginbg=res.data.loginbg
-          this.brokerage_type=res.data.brokerage_type
-
-          this.sharebg=res.data.sharebg
-
-          this.hongbao.minprice=res.data.minprice
-          this.hongbao.maxprice=res.data.maxprice
-          this.hongbao.num=res.data.num
+          this.phone=res.data.phone?res.data.phone:''
+          this.email = res.data.email?res.data.email:''
+          this.buy = res.data.buy?res.data.buy:''
+          this.eng_buy = res.data.eng_buy?res.data.eng_buy:''
+          this.bussiness = res.data.bussiness?res.data.bussiness:''
+          this.media = res.data.media?res.data.media:''
+          this.wechat_title = res.data.wechat_title?res.data.wechat_title:''
+          this.ins_title = res.data.ins_title?res.data.ins_title:''
+          this.weibo_title = res.data.weibo_title?res.data.weibo_title:''
+          this.wechat_bg = res.data.wechat_bg?res.data.wechat_bg:'../static/images/default.png'
+          this.ins_bg = res.data.ins_bg?res.data.ins_bg:'../static/images/default.png'
+          this.weibo_bg = res.data.weibo_bg?res.data.weibo_bg:'../static/images/default.png'
 
 
         } else {

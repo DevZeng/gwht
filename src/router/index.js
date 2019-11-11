@@ -35,6 +35,7 @@ import Document from '@/components/Setting/Document'
 import Delivelist from '@/components/Setting/Delivelist'
 
 import Banner from '@/components/Banner/Banner'
+import MomentList from '@/components/Moment/MomentList'
 
 const Login = resolve => require(['@/components/Login'], resolve)
 
@@ -66,16 +67,27 @@ let router = new Router({
 {
     leaf: true,
     path: '/',
-    name: '拼团分类',
+    name: '产品分类',
     component: Home,
     redirect: '/Good/Goodtype',
     menuShow: true,
     iconCls: 'iconfont menu-good',
     children: [
-    {path: '/Good/Goodtype',component: Goodtype,name: '拼团分类',menuShow: true,meta:{permission: ''}},
+    {path: '/Good/Goodtype',component: Goodtype,name: '产品分类',menuShow: true,meta:{permission: ''}},
     ]
 },
-
+{
+    leaf: true,
+    path: '/',
+    name: '动态管理',
+    component: Home,
+    redirect: '/Moment/MomentList',
+    menuShow: true,
+    iconCls: 'iconfont menu-good',
+    children: [
+    {path: '/Moment/MomentList',component: MomentList,name: '动态管理',menuShow: true,meta:{permission: ''}},
+    ]
+},
 {
     leaf: true,
     path: '/',
@@ -90,57 +102,57 @@ let router = new Router({
 },
 
 
-{
-    leaf: true,
-    path: '/',
-    name: '订单管理',
-    component: Home,
-    redirect: '/Order/Orderlist',
-    menuShow: true,
-    iconCls: 'iconfont menu-dingdan',
-    children: [
-    {path: '/Order/Orderlist',component: Orderlist,name: '订单记录',menuShow: true,meta:{permission: ''}}, 
-    ]
-}, 
-{
-    leaf: true,
-    path: '/',
-    name: '用户',
-    component: Home,
-    redirect: '/User/Userlist',
-    menuShow: true,
-    iconCls: 'iconfont menu-yonghu',
-    children: [
-    {path: '/User/Userlist',component: Userlist,name: '用户列表',menuShow: true,meta:{permission: ''}},
-    ]
-}, 
+// {
+//     leaf: true,
+//     path: '/',
+//     name: '订单管理',
+//     component: Home,
+//     redirect: '/Order/Orderlist',
+//     menuShow: true,
+//     iconCls: 'iconfont menu-dingdan',
+//     children: [
+//     {path: '/Order/Orderlist',component: Orderlist,name: '订单记录',menuShow: true,meta:{permission: ''}}, 
+//     ]
+// }, 
+// {
+//     leaf: true,
+//     path: '/',
+//     name: '用户',
+//     component: Home,
+//     redirect: '/User/Userlist',
+//     menuShow: true,
+//     iconCls: 'iconfont menu-yonghu',
+//     children: [
+//     {path: '/User/Userlist',component: Userlist,name: '用户列表',menuShow: true,meta:{permission: ''}},
+//     ]
+// }, 
 
 
-{
-    leaf: true,
-    path: '/',
-    name: '分销管理',
-    component: Home,
-    redirect: '/Agent/Proxylist',
-    menuShow: true,
-    iconCls: 'iconfont menu-kongzhi',
-    children: [
-    {path: '/Agent/Proxylist',component: Proxylist,name: '代理列表',menuShow: true,meta:{permission: ''}}, 
-    ]
-},
+// {
+//     leaf: true,
+//     path: '/',
+//     name: '分销管理',
+//     component: Home,
+//     redirect: '/Agent/Proxylist',
+//     menuShow: true,
+//     iconCls: 'iconfont menu-kongzhi',
+//     children: [
+//     {path: '/Agent/Proxylist',component: Proxylist,name: '代理列表',menuShow: true,meta:{permission: ''}}, 
+//     ]
+// },
 
-{
-    leaf: true,
-    path: '/',
-    name: '分销申请',
-    component: Home,
-    redirect: '/Agent/Joinlist',
-    menuShow: true,
-    iconCls: 'iconfont menu-kongzhi',
-    children: [
-    {path: '/Agent/Joinlist',component: Joinlist,name: '分销申请',menuShow: true,meta:{permission: ''}}, 
-    ]
-},
+// {
+//     leaf: true,
+//     path: '/',
+//     name: '分销申请',
+//     component: Home,
+//     redirect: '/Agent/Joinlist',
+//     menuShow: true,
+//     iconCls: 'iconfont menu-kongzhi',
+//     children: [
+//     {path: '/Agent/Joinlist',component: Joinlist,name: '分销申请',menuShow: true,meta:{permission: ''}}, 
+//     ]
+// },
 
 {    
     // leaf: true,
@@ -152,26 +164,26 @@ let router = new Router({
     iconCls: 'iconfont menu-xitong',
     children: [
     {path: '/Setting/Baseset',component: Baseset,name: '系统设置',menuShow: true,meta:{permission: ''}},
-    {path: '/Setting/Wordset',component: Wordset,name: '搜索设置',menuShow: true,meta:{permission: ''}},
-    {path: '/Setting/Wechatset',component: Wechatset,name: '微信设置',menuShow: true,meta:{permission: ''}},
+    // {path: '/Setting/Wordset',component: Wordset,name: '搜索设置',menuShow: true,meta:{permission: ''}},
+    // {path: '/Setting/Wechatset',component: Wechatset,name: '微信设置',menuShow: true,meta:{permission: ''}},
     {path: '/Setting/Document',component: Document,name: '帮助文档',menuShow: true,meta:{permission: ''}},
-    {path: '/Setting/Delivelist',component: Delivelist,name: '快递设置',menuShow: true,meta:{permission: ''}},
+    // {path: '/Setting/Delivelist',component: Delivelist,name: '快递设置',menuShow: true,meta:{permission: ''}},
     ]
 }, 
 
 
-{
-  leaf: true,
-  path: '/',
-  name: '推送',
-  component: Home,
-  redirect: '/Message/Sendmsg',
-  menuShow: true,
-  iconCls: 'iconfont menu-guanggao',
-  children: [
-  {path: '/Message/Sendmsg',component: Sendmsg,name: '模板消息',menuShow: true,meta:{permission: ''}},
-  ]
-}, 
+// {
+//   leaf: true,
+//   path: '/',
+//   name: '推送',
+//   component: Home,
+//   redirect: '/Message/Sendmsg',
+//   menuShow: true,
+//   iconCls: 'iconfont menu-guanggao',
+//   children: [
+//   {path: '/Message/Sendmsg',component: Sendmsg,name: '模板消息',menuShow: true,meta:{permission: ''}},
+//   ]
+// }, 
 
 
 

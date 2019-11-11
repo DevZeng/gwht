@@ -3,8 +3,8 @@
     <el-col :span="24" class="warp-breadcrum">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/' }"><b>首页</b></el-breadcrumb-item>
-        <el-breadcrumb-item>拼团管理</el-breadcrumb-item>
-        <el-breadcrumb-item>拼团列表</el-breadcrumb-item>
+        <el-breadcrumb-item>产品管理</el-breadcrumb-item>
+        <el-breadcrumb-item>产品列表</el-breadcrumb-item>
       </el-breadcrumb>
     </el-col>
 
@@ -12,7 +12,7 @@
 
      <el-form :inline="true">
       <el-form-item>
-        <el-button type="primary" size="mini" @click="newone">发布拼团</el-button>
+        <el-button type="primary" size="mini" @click="newone">发布产品</el-button>
       </el-form-item>
     </el-form>
 
