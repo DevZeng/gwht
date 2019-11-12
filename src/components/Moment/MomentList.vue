@@ -15,6 +15,17 @@
     <el-form-item>
       <el-button type="primary" size="mini" @click="newone">新增动态</el-button>
     </el-form-item>
+    <el-form-item label="动态语言：">
+        <el-select v-model="filter.state" placeholder="全部" @change="changestate" size="small">
+          <el-option label="中文" value="1"></el-option>
+          <el-option label="英文" value="2"></el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item>
+        <el-button type="primary" size="small" @click="getlist">搜索</el-button>
+        <el-button size="small" @click="clear">清空</el-button>
+      </el-form-item>
   </el-form>
 
 
@@ -41,6 +52,13 @@
 <el-col>
   <el-dialog :title="diatitle" :visible.sync="dialogNewVisible" width="800" center style="min-width: 800px">
     <el-form ref="nedoc" :model="nedoc" label-width="120px" :rules="rules" status-icon>
+
+      <el-form-item label="动态语言：" prop="language">
+              <el-select v-model="nedoc.language" placeholder="全部" size="small">
+                <el-option label="中文" value="1"></el-option>
+                <el-option label="英文" value="2"></el-option>
+              </el-select>
+            </el-form-item>
 
       <el-form-item label="标题:" prop="title">
         <el-input v-model="nedoc.title" style="max-width: 300px;" placeholder="请输入标题"></el-input>
@@ -133,7 +151,10 @@
         checkper1:false,
         checkper2:false,
 
-
+filter:{
+          name:'',
+          state:''
+        },
         currentPage: 1,
         list:[],
         count:0,
@@ -146,7 +167,8 @@
         diatitle:'新增文档',
         nedoc:{
           title:'',
-          detail:''
+          detail:'',
+          language:1
         },
         rules: {
           title: [{required: true, trigger: 'blur',message: '请输入文档标题'}],
@@ -205,7 +227,7 @@
       },
 
       getlist(){
-        var allParams = '?page='+ this.currentPage + '&limit=' + this.limit;
+        var allParams = '?page='+ this.currentPage + '&limit=' + this.limit+ '&language=' + this.filter.state;;
         momentsGet(allParams).then((res) => {
           this.list=res.data.data;
           this.count=res.data.count
@@ -232,7 +254,8 @@
        this.dialogNewVisible=true,
        this.nedoc={
          title:'',
-         detail:''
+         detail:'',
+         language:1
        }
      },
 
@@ -260,7 +283,8 @@
       this.editId = row.id;
       this.nedoc={
         title:row.title,
-        detail:row.detail
+        detail:row.detail,
+        language:row.language
       }
     },
 
@@ -287,13 +311,15 @@
               title:this.nedoc.title,
               id:this.editId,
               detail:this.nedoc.detail,
-              code:'helpdoc'
+              code:'helpdoc',
+              language:this.nedoc.language
             };
           }else{
             var allParams = {
               title:this.nedoc.title,
               detail:this.nedoc.detail,
-              code:'helpdoc'
+              code:'helpdoc',
+              language:this.nedoc.language
             };
           }
           momentPost(allParams).then((res) => {
