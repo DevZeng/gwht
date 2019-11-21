@@ -85,7 +85,7 @@ export const advertDel = params => { return axios.get(`${base}/del/banner` + `${
 
 
 
-//分类
+//产品分类
 export const typeGet = params => { return axios.get(`${base}/types` + `${params}`).then(res => res.data) }
 
 export const typeAllGet = params => { return axios.get(`${base}/all/types` + `${params}`).then(res => res.data) }
@@ -108,11 +108,24 @@ export const listDel = params => { return axios.get(`${base}/del/product` + `${p
 export const upload = params => { return axios.post(`${base}/product`, params).then(res => res.data) }
 
 
+// 获取全部项目
+export const prolistGet = params => { return axios.get(`${base}/projects` + `${params}`).then(res => res.data) }
+
+// 添加项目
+export const proAdd = params => { return axios.post(`${base}/project`, params).then(res => res.data) }
+
+// 删除项目
+export const proDel = params => { return axios.get(`${base}/del/project` + `${params}`).then(res => res.data) }
+
+// 获取单个项目
+export const proGet = params => { return axios.get(`${base}/project` + `${params}`).then(res => res.data) }
 
 //用户
 export const userGet = params => { return axios.get(`${base}/wechat/users` + `${params}`).then(res => res.data) }
 
 export const userPost = params => { return axios.post(`${base}/wechat/user`, params).then(res => res.data) }
+
+
 
 
 //拼团

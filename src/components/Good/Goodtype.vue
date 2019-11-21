@@ -64,8 +64,9 @@
           <el-form-item label="分类标题：">
             <el-input v-model="newadv.title" style="max-width: 300px;" placeholder="请输入分类名称"></el-input>
           </el-form-item>
+
           <el-form-item label="上级分类：" prop="type_id">
-            <el-select v-model="type_id" placeholder="请选择分类">
+            <el-select v-model="type_id" placeholder="请选择分类" v-show="parent_type">
               <el-option
                 v-for="item in typeArr"
                 :label="item.title"
@@ -73,8 +74,32 @@
                 :key="item.id"
               ></el-option>
             </el-select>
-          </el-form-item>
 
+            <!-- <el-button
+                v-show="parent_type"
+                @click="Showtext"
+                type="warning"
+                size="mini"
+                style="margin: 5px 5px 5px 0"
+              >新增上级分类</el-button>
+            </div>
+            <el-input
+              v-model="type_id"
+              style="max-width: 300px;"
+              placeholder="请输入父分类名称"
+              v-show="addPar_type"
+            ></el-input>-->
+          </el-form-item>
+          <el-form-item label="语言选择" prop="language">
+            <el-select v-model="select" placheolder="请选择语言" @change="getLag">
+              <el-option
+                v-for="item in language"
+                :label="item.value"
+                :value="item.key"
+                :key="item.key"
+              ></el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="分类logo：">
             <el-upload
               class="upload-demo"
@@ -124,7 +149,6 @@
               </el-upload>
             </div>
           </el-form-item>
-
           <el-form-item style="margin-left: calc(50% - 200px);">
             <el-button size="small" type="primary" @click="save()">保 存</el-button>
             <el-button size="small" @click="dialogNewVisible = false">取 消</el-button>
@@ -167,6 +191,8 @@ export default {
       uptoken: {
         token: qiniu.token
       },
+      language: [{ key: 1, value: "中文" }, { key: 2, value: "英文" }],
+      select: "",
       upurl: qiniu.upurl,
 
       currentPage: 1,
@@ -175,7 +201,8 @@ export default {
       limit: 10,
       dialogNewVisible: false,
       dialogDelVisible: false,
-
+      parent_type: true,
+      addPar_type: false,
       putorup: "up",
       imgSrc: "../static/images/default.png",
       newadv: {
@@ -245,7 +272,15 @@ export default {
         this.$message.error("图片插入失败");
       }
     },
+    // 显示添加上级分类
+    Showtext() {
+      this.parent_type = false;
+      this.addPar_type = true;
+    },
 
+    getLag(index) {
+      this.select = index;
+    },
     getlist() {
       var allParams = "?page=" + this.currentPage + "&limit=" + this.limit;
       typeGet(allParams).then(res => {
@@ -309,16 +344,23 @@ export default {
             title: this.newadv.title,
             icon: this.imgSrc,
             description: this.newadv.desc,
-            parent_id: this.type_id
+            parent_id: this.type_id,
+            language: this.select
           };
         }
+        console.log(allParams);
+
         typePost(allParams).then(res => {
           if (res.msg === "ok") {
             this.$message({
               message: "提交成功",
               type: "success"
             });
+
+            this.getalllist();
             this.getlist();
+            this.parent_type = true;
+            this.addPar_type = false;
             this.dialogNewVisible = false;
           } else {
             this.$message({
@@ -340,7 +382,6 @@ export default {
       this.newadv.icon = row.icon;
       this.newadv.title = row.title;
       this.newadv.desc = row.description;
-      this.desc = row.description;
       this.type_id = row.parent_id;
     },
 
@@ -358,7 +399,10 @@ export default {
             message: "删除成功",
             type: "success"
           });
+          this.getalllist();
           this.getlist();
+          this.parent_type = true;
+          this.addPar_type = false;
           this.dialogDelVisible = false;
         } else {
           this.$message({

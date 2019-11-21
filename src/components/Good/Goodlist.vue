@@ -15,6 +15,17 @@
         <el-form-item>
           <el-button type="primary" size="mini" @click="newone">发布产品</el-button>
         </el-form-item>
+
+        <el-form-item label="语言选择：" prop="language" style="margin-left:20px">
+          <el-select v-model="select" placheolder="请选择语言" @change="getLag">
+            <el-option
+              v-for="item in language"
+              :label="item.value"
+              :value="item.key"
+              :key="item.key"
+            ></el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
 
       <el-table :data="list" border stripe style="width:1650px" size="small">
@@ -132,7 +143,8 @@ export default {
       limit: 10,
 
       dialogDelVisible: false,
-
+      language: [{ key: 1, value: "中文" }, { key: 2, value: "英文" }],
+      select: 1,
       editId: "",
       delId: ""
     };
@@ -146,7 +158,12 @@ export default {
 
     getlist() {
       var allParams =
-        "?page=" + this.currentPage + "&limit=" + this.limit + "&language=" + 1;
+        "?page=" +
+        this.currentPage +
+        "&limit=" +
+        this.limit +
+        "&language=" +
+        this.select;
       listGet(allParams).then(res => {
         console.log(res);
         this.list = res.data.data;
@@ -154,6 +171,10 @@ export default {
       });
     },
 
+    getLag(index) {
+      this.select = index;
+      this.getlist();
+    },
     // 排序确定功能
     // changesort(row) {
     //   if (row.sort == "") {

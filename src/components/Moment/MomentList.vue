@@ -16,15 +16,14 @@
           <el-button type="primary" size="mini" @click="newone">新增动态</el-button>
         </el-form-item>
         <el-form-item label="动态语言：">
-          <el-select v-model="filter.state" placeholder="全部" @change="filter.state" size="small">
-            <el-option label="中文" value="1"></el-option>
-            <el-option label="英文" value="2"></el-option>
+          <el-select v-model="select" placheolder="全部" @change="listLay">
+            <el-option
+              v-for="item in nedoc.language"
+              :label="item.value"
+              :value="item.key"
+              :key="item.key"
+            ></el-option>
           </el-select>
-        </el-form-item>
-
-        <el-form-item>
-          <el-button type="primary" size="small" @click="getlist">搜索</el-button>
-          <el-button size="small" @click="clear">清空</el-button>
         </el-form-item>
       </el-form>
 
@@ -65,9 +64,13 @@
       >
         <el-form ref="nedoc" :model="nedoc" label-width="120px" :rules="rules" status-icon>
           <el-form-item label="动态语言：" prop="language">
-            <el-select v-model="nedoc.language" placeholder="全部" size="small">
-              <el-option label="中文" value="1"></el-option>
-              <el-option label="英文" value="2"></el-option>
+            <el-select v-model="select" placheolder="请选择语言" @change="getLag">
+              <el-option
+                v-for="item in nedoc.language"
+                :label="item.value"
+                :value="item.key"
+                :key="item.key"
+              ></el-option>
             </el-select>
           </el-form-item>
 
@@ -177,10 +180,6 @@ export default {
       checkper1: false,
       checkper2: false,
 
-      filter: {
-        name: "",
-        state: ""
-      },
       currentPage: 1,
       list: [],
       count: 0,
@@ -194,8 +193,9 @@ export default {
       nedoc: {
         title: "",
         detail: "",
-        language: 1
+        language: [{ key: 1, value: "中文" }, { key: 2, value: "英文" }]
       },
+      select: 1,
       rules: {
         title: [{ required: true, trigger: "blur", message: "请输入文档标题" }],
         detail: [{ required: true, trigger: "blur", message: "请输入详细内容" }]
@@ -245,6 +245,13 @@ export default {
   },
 
   methods: {
+    listLay(value) {
+      this.select = value;
+      this.getlist();
+    },
+    getLag(value) {
+      this.select = value;
+    },
     quillImgSuccess(res, file) {
       let quill = this.$refs.myQuillEditor.quill;
       if (res.key) {
@@ -255,7 +262,6 @@ export default {
         this.$message.error("图片插入失败");
       }
     },
-    clear() {},
     getlist() {
       var allParams =
         "?page=" +
@@ -263,7 +269,7 @@ export default {
         "&limit=" +
         this.limit +
         "&language=" +
-        this.filter.state;
+        this.select;
       momentsGet(allParams).then(res => {
         this.list = res.data.data;
         this.count = res.data.count;
@@ -291,7 +297,7 @@ export default {
         (this.nedoc = {
           title: "",
           detail: "",
-          language: 1
+          language: [{ key: 1, value: "中文" }, { key: 2, value: "英文" }]
         });
     },
 
@@ -324,8 +330,6 @@ export default {
     },
 
     save() {
-      console.log(this.nedoc.detail);
-
       if (this.nedoc.title == "") {
         this.$message({
           message: "请输入标题",
@@ -345,14 +349,14 @@ export default {
             id: this.editId,
             detail: this.nedoc.detail,
             code: "helpdoc",
-            language: this.nedoc.language
+            language: this.select
           };
         } else {
           var allParams = {
             title: this.nedoc.title,
             detail: this.nedoc.detail,
             code: "helpdoc",
-            language: this.nedoc.language
+            language: this.select
           };
         }
         momentPost(allParams).then(res => {

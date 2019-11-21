@@ -157,13 +157,6 @@ export default {
       });
     },
 
-    getgroup() {
-      var allParams = "?page=" + this.gcurrentPage + "&limit=" + this.glimit;
-      groupsGet(allParams).then(res => {
-        console.log(res);
-      });
-    },
-
     handleSelect(index, row) {
       this.group_id = row.id;
       var grouplist = [];
@@ -284,7 +277,6 @@ export default {
 
   mounted: function() {
     this.getlist();
-    this.getgroup();
   }
 };
 </script>

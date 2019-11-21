@@ -20,7 +20,7 @@
         ref="newone"
         :model="newone"
       >
-        <el-form-item label="语言选择" prop="language">
+        <el-form-item label="语言选择：" prop="language">
           <el-select v-model="select" placheolder="请选择语言" @change="getLag">
             <el-option
               v-for="item in language"
@@ -31,7 +31,7 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="商品分类：" prop="parent_id">
+        <el-form-item label="上级分类：" prop="parent_id">
           <el-select v-model="parent_id" placeholder="请选择分类" @change="getPid">
             <el-option
               v-for="item in typeArr"
@@ -76,7 +76,7 @@
               class="pre-img"
               style="width:146px;height:146px;border:1px dashed #ccc;border-radius:6px;display: block;margin-top: 1px;"
             />
-            <p slot="tip" class="upload__tip">可上传JPG/PNG文件，建议图片长宽比为1:1</p>
+            <!-- <p slot="tip" class="upload__tip">可上传JPG/PNG文件，建议图片长宽比为1:1</p> -->
           </el-upload>
         </el-form-item>
 
@@ -143,50 +143,55 @@
               class="pre-img"
               style="width:146px;height:146px;border:1px dashed #ccc;border-radius:6px;display: block;margin-top: 1px;"
             />
-            <p slot="tip" class="upload__tip">可上传JPG/PNG文件，建议图片长宽比为16:9</p>
           </el-upload>
         </el-form-item>
 
-        <el-form-item label="使用区域：" prop="areas">
-          <div v-for="(item,index) in areas" :key="index">
-            <div style="margin-bottom:20px;">
+        <div v-for="(item,index) in newone.areas" :key="index">
+          <div style="display:inline-block;">
+            <el-form-item label="区域名称：">
               <el-input
                 v-model="item.title"
                 maxlength="20"
                 placeholder="请输入区域名称"
-                style="width:300px; margin-bottom:10px;"
+                style="width:300px; "
               ></el-input>
-              <el-upload
-                :action="upurl"
-                :data="uptoken"
-                list-type="picture-card"
-                v-model="areas[index].icon"
-                :onBind="index"
-                :on-success="HomeSuccess"
-                accept="image/*"
-              >
-                <img
-                  src="../../../static/images/default1.png"
-                  class="pre-img"
-                  style="width:145px;height:144px;margin-top: 1px;display: block"
-                />
-              </el-upload>
+            </el-form-item>
+            <el-form-item label="区域内容：">
               <el-input
                 v-model="item.detail"
                 maxlength="20"
-                placeholder="请输入区域名称"
-                style="width:300px; margin-bottom:10px;"
+                placeholder="请输入内容"
+                style="width:300px; margin-bottom:10px; display:block;"
               ></el-input>
-            </div>
+            </el-form-item>
+            <el-form-item label="区域图片：">
+              <el-upload
+                accept="image/*"
+                :action="upurl"
+                :data="uptoken"
+                v-model="newone.areas[index].icon"
+                :onBind="index"
+                :on-success="HomeSuccess"
+                :show-file-list="false"
+              >
+                <img
+                  :src="newone.areas[index].icon"
+                  class="pre-img"
+                  style="width:146px;height:146px;border:1px dashed #ccc;border-radius:6px;display: block;margin-top: 1px;"
+                />
+              </el-upload>
+            </el-form-item>
           </div>
-        </el-form-item>
+        </div>
 
-        <el-form-item label="图片展示">
+        <el-form-item label="图片展示：">
           <el-upload
             :action="upurl"
             :data="uptoken"
             list-type="picture-card"
             v-model="newone.pictures"
+            :file-list="newone.pictures"
+            :on-remove="handleRemove"
             :on-success="handlelistSuccess"
             accept="image/*"
           >
@@ -206,6 +211,7 @@
             accept=".xlsx"
             v-model="newone.parameter"
             :on-success="ExcelSuccess"
+            :file-list="newone.parameter"
           >
             <el-button size="small" type="primary">点击上传</el-button>
           </el-upload>
@@ -220,7 +226,7 @@
 </template>
 
 <script>
-import { typeGet } from "../../api/api";
+import hosturl, { typeGet } from "../../api/api";
 import { typeAllGet } from "../../api/api";
 
 import qiniu from "../../api/qiniu";
@@ -257,9 +263,9 @@ export default {
         material: "",
         cover: "../static/images/default1.png",
         type_id: "",
-        pictures: "",
+        pictures: [],
         language: "",
-        parameter: ""
+        parameter: []
       },
       areas: [
         {
@@ -277,7 +283,7 @@ export default {
       ],
       select: 1,
       category_cover: "../static/images/default1.png",
-
+      images: "",
       categories: [],
       groupid: "",
 
@@ -340,27 +346,39 @@ export default {
 
     // 图片上传
 
-    ExcelSuccess(res, file) {
-      this.newone.parameter = this.host + res.data.base_url;
+    ExcelSuccess(res, file, fileList) {
+      this.newone.parameter = [];
+      this.newone.parameter.push({
+        uid: fileList[0].uid,
+        url: this.host + res.data.base_url,
+        name: res.data.file_name
+      });
+      // console.log(this.newone.parameter);
     },
     HomeSuccess(res, file, fileList, index) {
+      this.areas[index].icon = "";
       this.areas[index].icon = this.host + res.data.base_url;
     },
     guigeSuccess(res, file) {
+      this.category_cover = "";
+
       this.category_cover = this.host + res.data.base_url;
     },
     handleSuccess(res, file) {
+      this.newone.cover = "";
       this.newone.cover = this.host + res.data.base_url;
     },
 
+    handleRemove(file, fileList) {
+      console.log(file);
+    },
     handlelistSuccess(res, file, fileList) {
-      this.newone.pictures = [];
-      for (var i = 0; i < fileList.length; i++) {
-        if (fileList[i].response) {
-          this.newone.pictures.push(this.host + res.data.base_url);
-        }
-      }
-      console.log(this.newone.pictures);
+      // this.newone.pictures.push({url:response.message})
+      this.newone.pictures.push({
+        uid: fileList.uid,
+        url: this.host + res.data.base_url
+      });
+      // console.log(this.newone.pictures);
     },
 
     // 上传信息
@@ -401,9 +419,17 @@ export default {
       // }
 
       // allParams.pictures = images;
+      var image = [];
+      // 处理image
+      for (var i = 0; i < this.newone.pictures.length; i++) {
+        // console.log(this.newone.pictures[i].url);
+        image.push(this.newone.pictures[i].url);
+      }
+
+      var parameter = this.newone.parameter[0].url;
 
       var allParams = {
-        id: 0,
+        id: this.groupid,
         language: this.select,
         title: this.newone.title,
         type_id: this.newone.type_id,
@@ -412,11 +438,10 @@ export default {
         categories: this.categories,
         category_cover: this.category_cover,
         areas: this.areas,
-        parameter: this.newone.parameter,
-        pictures: this.newone.pictures
+        parameter: parameter,
+        pictures: image
       };
-      console.log(allParams);
-      return;
+
       // 发送到数据库里面去
       upload(allParams).then(res => {
         if (res.msg == "ok") {
@@ -450,17 +475,42 @@ export default {
           this.newone.material = res.data.material;
           this.newone.parameter = res.data.parameter;
           this.category_cover = res.data.category_cover;
-          // var images = [];
-          // for (var i = 0; i < res.data.pictures.length; i++) {
-          //   images.push({
-          //     uid: i,
-          //     url: res.data.pictures[i].href,
-          //     response: {
-          //       key: 1
-          //     }
-          //   });
-          // }
-          // this.newone.pictures = images;
+          this.categories = res.data.categories;
+          // console.log(res.data.areas);
+          // 处理区域
+          var area = [];
+          for (var i = 0; i < res.data.areas.length; i++) {
+            area.push({
+              title: res.data.areas[i].title,
+              icon: res.data.areas[i].icon,
+              type: res.data.areas[i].type,
+              detail: ""
+            });
+          }
+          this.newone.areas = area;
+          console.log(this.newone.areas);
+
+          // 处理图片
+          var image = [];
+          for (var i = 0; i < res.data.pictures.length; i++) {
+            image.push({
+              uid: res.data.pictures[i].id,
+              url: res.data.pictures[i].href
+            });
+          }
+          for (var i = 0; i < image.length; i++) {
+            this.newone.pictures.push({
+              uid: 1,
+              url: image[i].url
+            });
+          }
+          // EX处理
+          var excal = [];
+          excal.push({
+            name: res.data.parameter,
+            url: res.data.parameter
+          });
+          this.newone.parameter = excal;
         });
       }
     },
