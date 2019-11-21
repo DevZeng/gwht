@@ -190,13 +190,13 @@ export const keywordDel = params => { return axios.get(`${base}/del/keyword` + `
 
 
 //帮助文档
-export const documentsGet = params => { return axios.get(`${base}/documents` + `${params}`).then(res => res.data) }
+export const documentsGet = params => { return axios.get(`${base}/data/documents` + `${params}`).then(res => res.data) }
 
 // export const documentGet = params => { return axios.get(`${base}/document`+`${params}`).then(res => res.data)}
 
-export const documentPost = params => { return axios.post(`${base}/document`, params).then(res => res.data) }
+export const documentPost = params => { return axios.post(`${base}/data/document`, params).then(res => res.data) }
 
-// export const documentDel = params => { return axios.get(`${base}/del/` + `${params}`).then(res => res.data) }
+export const documentDel = params => { return axios.get(`${base}/del/data/document` + `${params}`).then(res => res.data) }
 
 //动态管理
 export const momentsGet = params => { return axios.get(`${base}/moments` + `${params}`).then(res => res.data) }

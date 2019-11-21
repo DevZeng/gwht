@@ -15,6 +15,17 @@
         <el-form-item>
           <el-button type="primary" size="mini" @click="newone">新增文档</el-button>
         </el-form-item>
+
+        <el-form-item label="请选择语言：">
+          <el-select v-model="select" placheolder="请选择语言" @change="getLag">
+            <el-option
+              v-for="item in language"
+              :label="item.value"
+              :value="item.key"
+              :key="item.key"
+            ></el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
 
       <el-table :data="list" border stripe style="width:1121px" size="small">
@@ -24,7 +35,7 @@
           <template slot-scope="scope">
             <el-button type="primary" size="mini" @click="handleSee(scope.$index, scope.row)">预览</el-button>
             <el-button type="primary" size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-            <!-- <el-button type="danger" size="mini" @click="handleDelete(scope.$index, scope.row)">删除</el-button> -->
+            <el-button type="danger" size="mini" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -52,8 +63,35 @@
         style="min-width: 800px"
       >
         <el-form ref="nedoc" :model="nedoc" label-width="120px" :rules="rules" status-icon>
-          <el-form-item label="标题:" prop="title">
+          <el-form-item label="请选择语言：">
+            <el-select v-model="select" placheolder="请选择语言" @change="getLag">
+              <el-option
+                v-for="item in language"
+                :label="item.value"
+                :value="item.key"
+                :key="item.key"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="标题：" prop="title">
             <el-input v-model="nedoc.title" style="max-width: 300px;" placeholder="请输入标题"></el-input>
+          </el-form-item>
+
+          <el-form-item label="图片：">
+            <el-upload
+              class="upload-demo"
+              :action="upurl"
+              :data="uptoken"
+              :on-success="handleSuccess"
+              :show-file-list="false"
+              accept="image/*"
+            >
+              <img
+                :src="nedoc.cover"
+                style="width:146px;height:146px;border:1px dashed #ccc;border-radius:6px;display: block;margin-top: 1px;"
+              />
+            </el-upload>
           </el-form-item>
 
           <el-form-item label="详细内容:" prop="detail" style="margin-bottom: 40px">
@@ -139,7 +177,7 @@ import qiniu from "../../api/qiniu";
 import { documentsGet } from "../../api/api";
 // import {documentGet} from '../../api/api';
 import { documentPost } from "../../api/api";
-// import {documentDel} from '../../api/api';
+import {documentDel} from '../../api/api';
 
 import "quill/dist/quill.core.css";
 import "quill/dist/quill.snow.css";
@@ -151,9 +189,11 @@ export default {
   data() {
     return {
       uptoken: {
-        token: qiniu.token
+        key: "image"
       },
       upurl: qiniu.upurl,
+
+      host: "http://111.230.135.20/",
 
       checkper1: false,
       checkper2: false,
@@ -170,8 +210,11 @@ export default {
       diatitle: "新增文档",
       nedoc: {
         title: "",
-        detail: ""
+        detail: "",
+        cover: ""
       },
+      language: [{ key: 1, value: "中文" }, { key: 2, value: "英文" }],
+      select: 1,
       rules: {
         title: [{ required: true, trigger: "blur", message: "请输入文档标题" }],
         detail: [{ required: true, trigger: "blur", message: "请输入详细内容" }]
@@ -221,6 +264,18 @@ export default {
   },
 
   methods: {
+    // 获取语言分类
+    getLag(index, value) {
+      this.select = index;
+      this.getlist();
+    },
+
+    // 图片处理
+    handleSuccess(res, file) {
+      this.nedoc.cover = "";
+      this.nedoc.cover = this.host + res.data.base_url;
+      // console.log(this.nedoc.cover);
+    },
     quillImgSuccess(res, file) {
       console.log(res);
       let quill = this.$refs.myQuillEditor.quill;
@@ -234,34 +289,42 @@ export default {
     },
 
     getlist() {
-      var allParams = "?page=" + this.currentPage + "&limit=" + this.limit;
+      var allParams =
+        "?page=" +
+        this.currentPage +
+        "&limit=" +
+        this.limit +
+        "&language=" +
+        this.select;
       documentsGet(allParams).then(res => {
         this.list = res.data.data;
         this.count = res.data.count;
       });
     },
 
-    checkPer() {
-      var per = sessionStorage.getItem("permissions");
+    // checkPer() {
+    //   var per = sessionStorage.getItem("permissions");
 
-      if (per.indexOf("documentAdd") > -1) {
-        this.checkper1 = true;
-      }
+    //   if (per.indexOf("documentAdd") > -1) {
+    //     this.checkper1 = true;
+    //   }
 
-      var per = sessionStorage.getItem("permissions");
+    //   var per = sessionStorage.getItem("permissions");
 
-      if (per.indexOf("documentDel") > -1) {
-        this.checkper2 = true;
-      }
-    },
+    //   if (per.indexOf("documentDel") > -1) {
+    //     this.checkper2 = true;
+    //   }
+    // },
 
     newone() {
       this.putorup = "up";
       (this.diatitle = "新增文档"),
         (this.dialogNewVisible = true),
         (this.nedoc = {
+          cover: "../static/images/default1.png",
           title: "",
-          detail: ""
+          detail: "",
+          language: this.language
         });
     },
 
@@ -287,14 +350,14 @@ export default {
       this.putorup = "put";
       this.editId = row.id;
       this.nedoc = {
+        cover: row.cover,
+        language: this.select,
         title: row.title,
         detail: row.detail
       };
     },
 
     save() {
-      console.log(this.nedocdetail);
-
       if (this.nedoc.title == "") {
         this.$message({
           message: "请输入标题",
@@ -310,18 +373,22 @@ export default {
         //   if (valid) {
         if (this.putorup == "put") {
           var allParams = {
-            title: this.nedoc.title,
             id: this.editId,
+            title: this.nedoc.title,
             detail: this.nedoc.detail,
-            code: "helpdoc"
+            cover: this.nedoc.cover,
+            language: this.select
           };
         } else {
           var allParams = {
+            id: "",
             title: this.nedoc.title,
             detail: this.nedoc.detail,
-            code: "helpdoc"
+            cover: this.nedoc.cover,
+            language: this.select
           };
         }
+        console.log(allParams);
         documentPost(allParams).then(res => {
           if (res.msg === "ok") {
             this.$message({
@@ -352,6 +419,7 @@ export default {
     submitdel() {
       this.dialogDelVisible = false;
       var allParams = "?id=" + this.delId;
+
       documentDel(allParams).then(res => {
         // console.log(res)
         if (res.msg === "ok") {
