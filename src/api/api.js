@@ -190,13 +190,13 @@ export const keywordDel = params => { return axios.get(`${base}/del/keyword` + `
 
 
 //帮助文档
-export const documentsGet = params => { return axios.get(`${base}/data/documents` + `${params}`).then(res => res.data) }
+export const documentsGet = params => { return axios.get(`${base}/documents` + `${params}`).then(res => res.data) }
 
 // export const documentGet = params => { return axios.get(`${base}/document`+`${params}`).then(res => res.data)}
 
-export const documentPost = params => { return axios.post(`${base}/data/document`, params).then(res => res.data) }
+export const documentPost = params => { return axios.post(`${base}/document`, params).then(res => res.data) }
 
-export const documentDel = params => { return axios.get(`${base}/del/data/document` + `${params}`).then(res => res.data) }
+export const documentDel = params => { return axios.get(`${base}/del/document` + `${params}`).then(res => res.data) }
 
 //动态管理
 export const momentsGet = params => { return axios.get(`${base}/moments` + `${params}`).then(res => res.data) }
@@ -204,6 +204,15 @@ export const momentsGet = params => { return axios.get(`${base}/moments` + `${pa
 export const momentPost = params => { return axios.post(`${base}/moment`, params).then(res => res.data) }
 export const momentDel = params => { return axios.get(`${base}/del/moment` + `${params}`).then(res => res.data) }
 
+
+// 资源管理
+export const dataGet = params => { return axios.get(`${base}/data/documents` + `${params}`).then(res => res.data) }
+
+// 添加资源
+export const dataPost = params => { return axios.post(`${base}/data/document`, params).then(res => res.data) }
+
+// 删除资源
+export const dataDel = params => { return axios.get(`${base}/del/data/document` + `${params}`).then(res => res.data) }
 
 
 

@@ -40,6 +40,8 @@ import Delivelist from '@/components/Setting/Delivelist'
 import Banner from '@/components/Banner/Banner'
 import MomentList from '@/components/Moment/MomentList'
 
+import DataList from '@/components/Data/DataList'
+
 const Login = resolve => require(['@/components/Login'], resolve)
 
 Vue.use(Router)
@@ -103,6 +105,18 @@ let router = new Router({
             iconCls: 'iconfont menu-good',
             children: [
                 { path: '/Moment/MomentList', component: MomentList, name: '动态管理', menuShow: true, meta: { permission: '' } },
+            ]
+        },
+        {
+            leaf: true,
+            path: '/',
+            name: '资源管理',
+            component: Home,
+            redirect: '/Data/DataList',
+            menuShow: true,
+            iconCls: 'iconfont menu-good',
+            children: [
+                { path: '/Data/DataList', component: DataList, name: '资源管理', menuShow: true, meta: { permission: '' } },
             ]
         },
         {

@@ -5,20 +5,20 @@
         <el-breadcrumb-item :to="{ path: '/' }">
           <b>首页</b>
         </el-breadcrumb-item>
-        <el-breadcrumb-item>动态管理</el-breadcrumb-item>
-        <el-breadcrumb-item>动态列表</el-breadcrumb-item>
+        <el-breadcrumb-item>系统设置</el-breadcrumb-item>
+        <el-breadcrumb-item>资源管理</el-breadcrumb-item>
       </el-breadcrumb>
     </el-col>
 
     <el-col :span="24" class="warp-main">
       <el-form :inline="true">
         <el-form-item>
-          <el-button type="primary" size="mini" @click="newone">新增动态</el-button>
+          <el-button type="primary" size="mini" @click="newone">新增资源</el-button>
         </el-form-item>
-        <el-form-item label="动态语言：">
-          <el-select v-model="select" placheolder="全部" @change="listLay">
+        <el-form-item label="语言选择：" prop="language">
+          <el-select v-model="select" placheolder="请选择语言" @change="getLag">
             <el-option
-              v-for="item in nedoc.language"
+              v-for="item in language"
               :label="item.value"
               :value="item.key"
               :key="item.key"
@@ -27,18 +27,19 @@
         </el-form-item>
       </el-form>
 
-      <el-table :data="list" border stripe style="width:1621px" size="small">
-        <el-table-column prop="id" label="编号" width="120" align="center"></el-table-column>
-        <el-table-column prop="title" label="标题" width="500" align="center"></el-table-column>
+      <el-table :data="list" border stripe style="width:1650px" size="small">
+        <el-table-column prop="id" label="编号" width="125" align="center"></el-table-column>
+        <el-table-column prop="title" label="标题" align="center"></el-table-column>
         <el-table-column prop="cover" label="图片" align="center">
           <template slot-scope="scope">
             <img :src="scope.row.cover" style="max-width:50px;max-height:50px;" />
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="500" align="center">
+        <el-table-column prop="detail" label="详情" width="450" align="center"></el-table-column>
+
+        <el-table-column label="操作" width="450" align="center">
           <template slot-scope="scope">
             <el-button type="primary" size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-
             <el-button type="danger" size="mini" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
@@ -67,18 +68,17 @@
         style="min-width: 800px"
       >
         <el-form ref="nedoc" :model="nedoc" label-width="120px" :rules="rules" status-icon>
-          <el-form-item label="动态语言：" prop="language">
+          <el-form-item label="语言选择：" prop="language">
             <el-select v-model="select" placheolder="请选择语言" @change="getLag">
               <el-option
-                v-for="item in nedoc.language"
+                v-for="item in language"
                 :label="item.value"
                 :value="item.key"
                 :key="item.key"
               ></el-option>
             </el-select>
           </el-form-item>
-
-          <el-form-item label="标题:" prop="title">
+          <el-form-item label="标题：" prop="title">
             <el-input v-model="nedoc.title" style="max-width: 300px;" placeholder="请输入标题"></el-input>
           </el-form-item>
 
@@ -157,10 +157,10 @@
 <script>
 import qiniu from "../../api/qiniu";
 
-import { momentsGet } from "../../api/api";
+import { dataGet } from "../../api/api";
 // import {documentGet} from '../../api/api';
-import { momentPost } from "../../api/api";
-import { momentDel } from "../../api/api";
+import { dataPost } from "../../api/api";
+import { dataDel } from "../../api/api";
 
 import "quill/dist/quill.core.css";
 import "quill/dist/quill.snow.css";
@@ -172,7 +172,7 @@ export default {
   data() {
     return {
       uptoken: {
-        token: qiniu.token
+        key: "image"
       },
       upurl: qiniu.upurl,
 
@@ -194,9 +194,10 @@ export default {
       nedoc: {
         title: "",
         detail: "",
-        language: [{ key: 1, value: "中文" }, { key: 2, value: "英文" }],
         cover: "../static/images/default1.png"
       },
+      language: [{ key: 1, value: "中文" }, { key: 2, value: "英文" }],
+
       select: 1,
       rules: {
         title: [{ required: true, trigger: "blur", message: "请输入文档标题" }],
@@ -250,16 +251,16 @@ export default {
     handleSuccess(res, file) {
       this.nedoc.cover = "";
       this.nedoc.cover = this.host + res.data.base_url;
+      console.log(this.nedoc.cover);
     },
 
-    listLay(value) {
-      this.select = value;
+    getLag(index) {
+      this.select = index;
       this.getlist();
     },
-    getLag(value) {
-      this.select = value;
-    },
+
     quillImgSuccess(res, file) {
+      console.log(res);
       let quill = this.$refs.myQuillEditor.quill;
       if (res.key) {
         let length = quill.getSelection().index;
@@ -269,6 +270,7 @@ export default {
         this.$message.error("图片插入失败");
       }
     },
+
     getlist() {
       var allParams =
         "?page=" +
@@ -277,25 +279,26 @@ export default {
         this.limit +
         "&language=" +
         this.select;
-      momentsGet(allParams).then(res => {
+      dataGet(allParams).then(res => {
+        console.log(res);
         this.list = res.data.data;
         this.count = res.data.count;
       });
     },
 
-    checkPer() {
-      var per = sessionStorage.getItem("permissions");
+    // checkPer() {
+    //   var per = sessionStorage.getItem("permissions");
 
-      if (per.indexOf("documentAdd") > -1) {
-        this.checkper1 = true;
-      }
+    //   if (per.indexOf("documentAdd") > -1) {
+    //     this.checkper1 = true;
+    //   }
 
-      var per = sessionStorage.getItem("permissions");
+    //   var per = sessionStorage.getItem("permissions");
 
-      if (per.indexOf("documentDel") > -1) {
-        this.checkper2 = true;
-      }
-    },
+    //   if (per.indexOf("documentDel") > -1) {
+    //     this.checkper2 = true;
+    //   }
+    // },
 
     newone() {
       this.putorup = "up";
@@ -307,17 +310,6 @@ export default {
         });
     },
 
-    opendialog() {
-      setTimeout(() => {
-        this.setdetail();
-      }, 100);
-    },
-
-    setdetail() {
-      var seeBox = document.getElementById("detail");
-      seeBox.innerHTML = this.currow.detail;
-    },
-
     handleEdit(index, row) {
       this.diatitle = "编辑文档";
       this.dialogNewVisible = true;
@@ -326,7 +318,7 @@ export default {
       this.nedoc = {
         title: row.title,
         detail: row.detail,
-        language: row.language,
+        language: row.select,
         cover: row.cover
       };
     },
@@ -347,21 +339,23 @@ export default {
         //   if (valid) {
         if (this.putorup == "put") {
           var allParams = {
-            title: this.nedoc.title,
             id: this.editId,
+            title: this.nedoc.title,
             detail: this.nedoc.detail,
             cover: this.nedoc.cover,
             language: this.select
           };
         } else {
           var allParams = {
+            id: "",
             title: this.nedoc.title,
             detail: this.nedoc.detail,
             cover: this.nedoc.cover,
             language: this.select
           };
         }
-        momentPost(allParams).then(res => {
+        console.log(allParams);
+        dataPost(allParams).then(res => {
           if (res.msg === "ok") {
             this.$message({
               message: "提交成功",
@@ -391,7 +385,8 @@ export default {
     submitdel() {
       this.dialogDelVisible = false;
       var allParams = "?id=" + this.delId;
-      momentDel(allParams).then(res => {
+
+      dataDel(allParams).then(res => {
         // console.log(res)
         if (res.msg === "ok") {
           this.$message({
