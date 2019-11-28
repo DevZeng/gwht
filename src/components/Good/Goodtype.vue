@@ -415,7 +415,7 @@ export default {
 
     handleCurrentChange(val) {
       this.currentPage = val;
-      this.getlist();
+      this.getalllist();
     },
 
     handleSizeChange(val) {
