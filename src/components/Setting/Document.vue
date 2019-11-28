@@ -12,9 +12,9 @@
 
     <el-col :span="24" class="warp-main">
       <el-form :inline="true">
-        <el-form-item>
+        <!-- <el-form-item>
           <el-button type="primary" size="mini" @click="newone">新增文档</el-button>
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
 
       <el-table :data="list" border stripe style="width:1650px" size="small">
