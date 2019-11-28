@@ -21,7 +21,7 @@
         <el-table-column prop="id" label="编号" width="125" align="center"></el-table-column>
         <el-table-column prop="title" label="标题" align="center"></el-table-column>
 
-        <el-table-column prop="detail" label="详情" width="450" align="center"></el-table-column>
+        <!-- <el-table-column prop="detail" label="详情" width="450" align="center"></el-table-column> -->
 
         <el-table-column label="操作" width="450" align="center">
           <template slot-scope="scope">
@@ -293,7 +293,8 @@ export default {
       this.editId = row.id;
       this.nedoc = {
         title: row.title,
-        detail: row.detail
+        detail: row.detail,
+        code:row.code
       };
     },
 
@@ -316,14 +317,14 @@ export default {
             id: this.editId,
             title: this.nedoc.title,
             detail: this.nedoc.detail,
-            code: "helpdoc"
+            code: this.nedoc.code,
           };
         } else {
           var allParams = {
             id: "",
             title: this.nedoc.title,
             detail: this.nedoc.detail,
-            code: "helpdoc"
+            code: this.nedoc.code,
           };
         }
         console.log(allParams);
