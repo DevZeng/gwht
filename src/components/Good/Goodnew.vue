@@ -36,7 +36,7 @@
             <el-option
               v-for="item in typeArr"
               :label="item.title"
-              :value="item.parent_id"
+              :value="item.id"
               :key="item.id"
             ></el-option>
           </el-select>
@@ -304,15 +304,17 @@ export default {
     // 获取分类的数据
     gettype() {
       var allParams = "?page=1&limit=999";
-      typeAllGet(allParams).then(res => {
+      typeGet(allParams).then(res => {
         this.typeArr = res.data.data;
       });
     },
 
     // 获取二级分类
     getPid(index, value) {
-      // console.log(this.typeArr[index].parent_id);
-      var parent_id = this.typeArr[index].parent_id;
+      // console.log(index);
+      // console.log(this.typeArr);
+      var parent_id = this.parent_id;
+      // console.log(this.parent_id);
       var allParams = "?page=1&&limit=999&&parent_id=" + parent_id;
       typeGet(allParams).then(res => {
         this.parentArr = res.data.data;
@@ -476,6 +478,7 @@ export default {
           this.newone.parameter = res.data.parameter;
           this.category_cover = res.data.category_cover;
           this.categories = res.data.categories;
+          this.parent_id = res.data.parent_id;
           // console.log(res.data.areas);
           // 处理区域
           var area = [];
@@ -511,6 +514,7 @@ export default {
             url: res.data.parameter
           });
           this.newone.parameter = excal;
+          this.getPid();
         });
       }
     },
