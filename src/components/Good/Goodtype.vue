@@ -420,7 +420,7 @@ export default {
 
     handleSizeChange(val) {
       this.limit = val;
-      this.getlist();
+      this.getalllist();
     }
   },
 
