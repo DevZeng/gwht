@@ -42,6 +42,8 @@ import MomentList from '@/components/Moment/MomentList'
 
 import DataList from '@/components/Data/DataList'
 
+import Adert from '@/components/Adert/Adertlist'
+
 const Login = resolve => require(['@/components/Login'], resolve)
 
 Vue.use(Router)
@@ -136,11 +138,11 @@ let router = new Router({
             path: '/',
             name: '首页广告',
             component: Home,
-            redirect: '/Banner/Banner',
+            redirect: '/Adert/Adertlist',
             menuShow: true,
             iconCls: 'iconfont menu-guanggao',
             children: [
-                { path: '/Banner/Banner', component: Banner, name: '首页广告', menuShow: true, meta: { permission: '' } }
+                { path: '/Adert/Adertlist', component: Adert, name: '首页广告', menuShow: true, meta: { permission: '' } }
             ]
         },
 

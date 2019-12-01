@@ -105,9 +105,9 @@
 
 
 <script>
-import { advertsGet } from "../../api/api";
-import { advertPost } from "../../api/api";
-import { advertDel } from "../../api/api";
+import { BannersGet } from "../../api/api";
+import { BannerPost } from "../../api/api";
+import { BannerDel } from "../../api/api";
 
 import qiniu from "../../api/qiniu";
 
@@ -151,7 +151,7 @@ export default {
   methods: {
     getlist() {
       var allParams = "?page=" + this.currentPage + "&limit=" + this.limit;
-      advertsGet(allParams).then(res => {
+      BannersGet(allParams).then(res => {
         this.list = res.data.data;
         this.count = res.data.count;
       });
@@ -198,7 +198,7 @@ export default {
           };
         }
 
-        advertPost(allParams).then(res => {
+        BannerPost(allParams).then(res => {
           if (res.msg === "ok") {
             this.$message({
               message: "提交成功",
@@ -236,7 +236,7 @@ export default {
     submitdel() {
       this.dialogDelVisible = false;
       var allParams = "?id=" + this.delId;
-      advertDel(allParams).then(res => {
+      BannerDel(allParams).then(res => {
         console.log(res);
         if (res.msg === "ok") {
           this.$message({

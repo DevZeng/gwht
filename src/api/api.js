@@ -76,9 +76,9 @@ export const requestLogout = params => { return axios.get(`${base}/logout` + `${
 
 
 //轮播
-export const advertsGet = params => { return axios.get(`${base}/banners` + `${params}`).then(res => res.data) }
-export const advertPost = params => { return axios.post(`${base}/banner`, params).then(res => res.data) }
-export const advertDel = params => { return axios.get(`${base}/del/banner` + `${params}`).then(res => res.data) }
+export const BannersGet = params => { return axios.get(`${base}/banners` + `${params}`).then(res => res.data) }
+export const BannerPost = params => { return axios.post(`${base}/banner`, params).then(res => res.data) }
+export const BannerDel = params => { return axios.get(`${base}/del/banner` + `${params}`).then(res => res.data) }
 
 
 
@@ -203,6 +203,14 @@ export const momentsGet = params => { return axios.get(`${base}/moments` + `${pa
 
 export const momentPost = params => { return axios.post(`${base}/moment`, params).then(res => res.data) }
 export const momentDel = params => { return axios.get(`${base}/del/moment` + `${params}`).then(res => res.data) }
+
+
+// 广告管理
+export const AdvertsGet = params => { return axios.get(`${base}/adverts` + `${params}`).then(res => res.data) }
+
+export const AdvertPost = params => { return axios.post(`${base}/advert`, params).then(res => res.data) }
+
+export const AdvertDel = params => { return axios.get(`${base}/del/advert` + `${params}`).then(res => res.data) }
 
 
 // 资源管理
