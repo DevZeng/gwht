@@ -39,23 +39,34 @@
           ></el-input>
         </el-form-item>
 
-        <el-form-item label="详细内容:">
-          <div class="edit_container">
-            <quill-editor
-              style="height:450px;"
-              v-model="newone.detail"
-              :options="editorOption"
-              class="editer"
-              placeholder="请输入详细内容"
-            ></quill-editor>
-            <el-upload
-              class="avatar-uploader quill-img"
-              :action="upurl"
-              :data="uptoken"
-              style="display: none"
-            ></el-upload>
-          </div>
-        </el-form-item>
+
+<el-form-item label="详细内容:" prop="detail" style="margin-bottom: 40px">
+            <div class="edit_container">
+              <quill-editor
+                v-model="newone.detail"
+                style="height:450px;"
+                ref="myQuillEditor"
+                :options="editorOption"
+                class="editer"
+                placeholder="请输入详细内容"
+              ></quill-editor>
+              <el-upload
+                class="avatar-uploader quill-img"
+                :action="upurl"
+                :data="uptoken"
+                :on-success="quillImgSuccess"
+                style="display: none"
+              >
+                <el-button
+                  size="small"
+                  type="primary"
+                  id="imgInput"
+                  element-loading-text="插入中,请稍候"
+                >点击上传</el-button>
+              </el-upload>
+            </div>
+          </el-form-item>
+        
 
         <el-form-item label="项目图片：" prop="cover">
           <el-upload
@@ -220,6 +231,17 @@ export default {
           }
         }
       });
+    },
+    quillImgSuccess(res, file) {
+      console.log(res);
+      let quill = this.$refs.myQuillEditor.quill;
+      if (res.data.base_url) {
+        let length = quill.getSelection().index;
+        quill.insertEmbed(length, "image", qiniu.hosturl + res.data.base_url);
+        quill.setSelection(length + 1);
+      } else {
+        this.$message.error("图片插入失败");
+      }
     },
 
     // 复选框选中时获取id

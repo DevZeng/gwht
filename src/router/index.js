@@ -131,7 +131,18 @@ let router = new Router({
                 { path: '/Banner/Banner', component: Banner, name: '轮播', menuShow: true, meta: { permission: '' } }
             ]
         },
-
+        {
+            leaf: true,
+            path: '/',
+            name: '首页广告',
+            component: Home,
+            redirect: '/Banner/Banner',
+            menuShow: true,
+            iconCls: 'iconfont menu-guanggao',
+            children: [
+                { path: '/Banner/Banner', component: Banner, name: '首页广告', menuShow: true, meta: { permission: '' } }
+            ]
+        },
 
         // {
         //     leaf: true,

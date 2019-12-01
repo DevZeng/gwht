@@ -229,9 +229,9 @@ export default {
     quillImgSuccess(res, file) {
       console.log(res);
       let quill = this.$refs.myQuillEditor.quill;
-      if (res.key) {
+      if (res.data.base_url) {
         let length = quill.getSelection().index;
-        quill.insertEmbed(length, "image", qiniu.showurl + res.key);
+        quill.insertEmbed(length, "image", qiniu.hosturl + res.data.base_url);
         quill.setSelection(length + 1);
       } else {
         this.$message.error("图片插入失败");
