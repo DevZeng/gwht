@@ -16,11 +16,22 @@
           <el-form-item>
             <el-button type="primary" size="mini" @click="newone">新增广告</el-button>
           </el-form-item>
+
+          <el-form-item label="语言选择：" prop="language">
+            <el-select v-model="select" placheolder="请选择语言" @change="getLag">
+              <el-option
+                v-for="item in language"
+                :label="item.value"
+                :value="item.key"
+                :key="item.key"
+              ></el-option>
+            </el-select>
+          </el-form-item>
         </el-form>
 
         <el-table :data="list" border stripe size="small" style="width:801px">
-          <el-table-column prop="id" label="广告编号" width="200" align="center"></el-table-column>
-          <el-table-column prop="href" label="广告图片" width="300" align="center">
+          <el-table-column prop="id" label="广告编号" align="center"></el-table-column>
+          <el-table-column prop="href" label="广告图片" align="center">
             <template slot-scope="scope">
               <img :src="scope.row.href" style="max-width:90px;max-height:90px;" />
             </template>
@@ -31,9 +42,9 @@
           <!-- <el-table-column prop="group_id" label="拼团id" width="200" align="center">
           </el-table-column>-->
 
-          <el-table-column label="操作" width="300" align="center">
+          <el-table-column label="操作" align="center">
             <template slot-scope="scope">
-              <el-button type="primary" size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+              <!-- <el-button type="primary" size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button> -->
               <el-button
                 type="danger"
                 size="small"
@@ -212,6 +223,7 @@ export default {
 
     getLag(index) {
       this.select = index;
+      this.getlist();
     },
 
     getPro() {
@@ -307,9 +319,8 @@ export default {
       this.putorup = "put";
       this.editId = row.id;
       this.imgSrc = row.href;
-      this.select = row.select;
-      this.type = row.type;
       this.pro_id = row.pro_id;
+      console.log(row.id);
     },
 
     handleDelete(index, row) {
