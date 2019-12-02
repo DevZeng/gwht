@@ -63,7 +63,7 @@ axios.interceptors.response.use(
     })
 
 
-let hosturl = 'http://111.230.135.20'
+let hosturl = 'ns.ns-space.cn'
 
 let base = hosturl
 
