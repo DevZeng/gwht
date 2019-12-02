@@ -78,7 +78,7 @@ _axios2.default.interceptors.response.use(function (response) {
     return Promise.reject(error);
 });
 
-var hosturl = 'ns.ns-space.cn';
+var hosturl = 'http://ns.ns-space.cn';
 
 var base = hosturl;
 
