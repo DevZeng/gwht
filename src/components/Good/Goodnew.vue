@@ -376,7 +376,18 @@ addarea() {
 
     handleRemove(file, fileList) {
       console.log(file);
-    },
+      console.log(fileList)
+      // fileList.remor
+  this.newone.pictures=[]
+  for(var i=0;i<fileList.length;i++){
+    this.newone.pictures.push(fileList[i])
+  //   // if(fileList[i].response.key !== 1){
+  //   //   this.newone.pictures.push(qiniu.hosturl+ fileList[i].response.key)
+  //   // }else {
+      
+  //   // }
+  }
+},
     handlelistSuccess(res, file, fileList) {
       // this.newone.pictures.push({url:response.message})
       this.newone.pictures.push({
@@ -430,7 +441,6 @@ addarea() {
         // console.log(this.newone.pictures[i].url);
         image.push(this.newone.pictures[i].url);
       }
-
       var parameter = this.newone.parameter[0].url;
 
       var allParams = {
