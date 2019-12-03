@@ -17,7 +17,7 @@
         </el-form-item>
       </el-form>
 
-      <el-table :data="list" border stripe style="width:1001px" size="small">
+      <el-table :data="list" border stripe style="width:1101px" size="small">
         <el-table-column prop="id" label="编号" width="200" align="center"></el-table-column>
 
         <el-table-column prop="icon" label="分类logo" width="200" align="center">
@@ -28,6 +28,13 @@
 
         <el-table-column prop="title" label="名称" width="200" align="center"></el-table-column>
         <el-table-column prop="parent" label="上级" width="200" align="center"></el-table-column>
+
+        <el-table-column label="排序" width="100" align="center">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.sort"  size="mini" type="number" min="0" @change="changeSort(scope.row.id,scope.row.sort)" ></el-input>
+                    <!-- <div v-if="scope.row.sort">{{scope.row.sort}}</div> -->
+                  </template>
+                </el-table-column>
 
         <el-table-column label="操作" width="200" align="center">
           <template slot-scope="scope">
@@ -149,6 +156,9 @@
               </el-upload>
             </div>
           </el-form-item>
+
+          
+
           <el-form-item style="margin-left: calc(50% - 200px);">
             <el-button size="small" type="primary" @click="save()">保 存</el-button>
             <el-button size="small" @click="dialogNewVisible = false">取 消</el-button>
@@ -175,7 +185,7 @@ import { typeGet } from "../../api/api";
 import { typeAllGet } from "../../api/api";
 import { typePost } from "../../api/api";
 import { typeDel } from "../../api/api";
-
+import { setTypeSort } from "../../api/api";
 import qiniu from "../../api/qiniu";
 
 import { Message } from "element-ui";
@@ -261,6 +271,33 @@ export default {
   },
 
   methods: {
+    changeSort(id,val){
+      console.log(id)
+      console.log(val)
+
+      var allParams = {
+        id: id,
+        sort:val
+      };
+      console.log(allParams)
+
+      // 发送到数据库里面去
+      setTypeSort(allParams).then(res => {
+        if (res.msg == "ok") {
+          this.$message({
+            message: "提交成功",
+            type: "success"
+          });
+          // this.getlist();
+          // this.$router.push({ path: "/Good/Goodlist" });
+        } else {
+          this.$message({
+            message: res.msg,
+            type: "error"
+          });
+        }
+      });
+    },
     quillImgSuccess(res, file) {
       console.log(res);
       let quill = this.$refs.myQuillEditor.quill;

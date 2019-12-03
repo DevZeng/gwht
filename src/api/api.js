@@ -94,6 +94,7 @@ export const typePost = params => { return axios.post(`${base}/type`, params).th
 
 export const typeDel = params => { return axios.get(`${base}/del/type` + `${params}`).then(res => res.data) }
 
+export const setTypeSort = params => { return axios.post(`${base}/type/sort`, params).then(res => res.data) }
 
 // 获取全部产品(products)
 export const listGet = params => { return axios.get(`${base}/products` + `${params}`).then(res => res.data) }
