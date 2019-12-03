@@ -33,7 +33,12 @@
 
         <el-form-item label="上级分类：" prop="parent_id">
           <el-select v-model="parent_id" placeholder="请选择分类" @change="getPid">
-            <el-option v-for="item in typeArr" :label="item.title" :value="item.id" :key="item.id"></el-option>
+            <el-option
+              v-for="item in typeArr"
+              :label="item.title"
+              :value="item.id"
+              :key="item.id"
+            ></el-option>
           </el-select>
         </el-form-item>
 
@@ -141,8 +146,11 @@
           </el-upload>
         </el-form-item>
 
-        <div v-for="(item,index) in newone.areas" :key="index">
-          <div style="display:inline-block;">
+
+
+<el-form-item label="区域：">
+          <div v-for="(item, index) in areas" :key="index">
+            <div style="display:inline-block;">
             <el-form-item label="区域名称：">
               <el-input
                 v-model="item.title"
@@ -151,33 +159,37 @@
                 style="width:300px; "
               ></el-input>
             </el-form-item>
-            <el-form-item label="区域内容：">
-              <el-input
-                v-model="item.detail"
-                maxlength="20"
-                placeholder="请输入内容"
-                style="width:300px; margin-bottom:10px; display:block;"
-              ></el-input>
-            </el-form-item>
             <el-form-item label="区域图片：">
               <el-upload
                 accept="image/*"
                 :action="upurl"
                 :data="uptoken"
-                v-model="newone.areas[index].icon"
+                v-model="areas[index].icon"
                 :onBind="index"
                 :on-success="HomeSuccess"
                 :show-file-list="false"
               >
                 <img
-                  :src="newone.areas[index].icon"
+                  :src="areas[index].icon"
                   class="pre-img"
                   style="width:146px;height:146px;border:1px dashed #ccc;border-radius:6px;display: block;margin-top: 1px;"
                 />
               </el-upload>
             </el-form-item>
           </div>
-        </div>
+            </div>
+          <el-button
+            @click.prevent="addarea()"
+            type="primary"
+            size="mini"
+            style="margin-top: 10px;"
+          >新增区域</el-button>
+        </el-form-item>
+
+        
+
+
+        
 
         <el-form-item label="图片展示：">
           <el-upload
@@ -260,23 +272,11 @@ export default {
         type_id: "",
         pictures: [],
         language: "",
-        parameter: [],
-        areas: [
-          {
-            title: "",
-            icon: "../static/images/default1.png",
-            type: 1,
-            detail: ""
-          },
-          {
-            title: "",
-            icon: "../static/images/default1.png",
-            type: 2,
-            detail: ""
-          }
-        ]
+        parameter: []
       },
-
+      areas: [
+        
+      ],
       select: 1,
       category_cover: "../static/images/default1.png",
       images: "",
@@ -341,7 +341,14 @@ export default {
         ]
       });
     },
-
+addarea() {
+      this.areas.push({
+          title: "",
+          icon: "../static/images/default1.png",
+          type: 1,
+          detail: ""
+        });
+    },
     // 图片上传
 
     ExcelSuccess(res, file, fileList) {
@@ -439,6 +446,7 @@ export default {
         parameter: parameter,
         pictures: image
       };
+
       // 发送到数据库里面去
       upload(allParams).then(res => {
         if (res.msg == "ok") {
@@ -464,7 +472,7 @@ export default {
       if (groupid) {
         var allParams = "?id=" + groupid;
         oneGet(allParams).then(res => {
-          console.log(res);
+          // console.log(res.data.categories)
           this.newone.title = res.data.title;
           this.newone.cover = res.data.cover;
           this.select = res.data.language;
@@ -484,8 +492,9 @@ export default {
               type: res.data.areas[i].type,
               detail: ""
             });
+            console.log(res.data.areas[i])
           }
-          this.newone.areas = area;
+          this.areas = area;
           console.log(this.newone.areas);
 
           // 处理图片
