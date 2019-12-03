@@ -33,12 +33,7 @@
 
         <el-form-item label="上级分类：" prop="parent_id">
           <el-select v-model="parent_id" placeholder="请选择分类" @change="getPid">
-            <el-option
-              v-for="item in typeArr"
-              :label="item.title"
-              :value="item.id"
-              :key="item.id"
-            ></el-option>
+            <el-option v-for="item in typeArr" :label="item.title" :value="item.id" :key="item.id"></el-option>
           </el-select>
         </el-form-item>
 
@@ -265,22 +260,23 @@ export default {
         type_id: "",
         pictures: [],
         language: "",
-        parameter: []
+        parameter: [],
+        areas: [
+          {
+            title: "",
+            icon: "../static/images/default1.png",
+            type: 1,
+            detail: ""
+          },
+          {
+            title: "",
+            icon: "../static/images/default1.png",
+            type: 2,
+            detail: ""
+          }
+        ]
       },
-      areas: [
-        {
-          title: "",
-          icon: "../static/images/default1.png",
-          type: 1,
-          detail: ""
-        },
-        {
-          title: "",
-          icon: "../static/images/default1.png",
-          type: 2,
-          detail: ""
-        }
-      ],
+
       select: 1,
       category_cover: "../static/images/default1.png",
       images: "",
@@ -443,7 +439,6 @@ export default {
         parameter: parameter,
         pictures: image
       };
-
       // 发送到数据库里面去
       upload(allParams).then(res => {
         if (res.msg == "ok") {
@@ -469,7 +464,7 @@ export default {
       if (groupid) {
         var allParams = "?id=" + groupid;
         oneGet(allParams).then(res => {
-          // console.log(res.data.categories)
+          console.log(res);
           this.newone.title = res.data.title;
           this.newone.cover = res.data.cover;
           this.select = res.data.language;

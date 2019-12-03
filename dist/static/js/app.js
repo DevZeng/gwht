@@ -3212,11 +3212,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
 
 
 
@@ -3257,19 +3252,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         type_id: "",
         pictures: [],
         language: "",
-        parameter: []
+        parameter: [],
+        areas: [{
+          title: "",
+          icon: "../static/images/default1.png",
+          type: 1,
+          detail: ""
+        }, {
+          title: "",
+          icon: "../static/images/default1.png",
+          type: 2,
+          detail: ""
+        }]
       },
-      areas: [{
-        title: "",
-        icon: "../static/images/default1.png",
-        type: 1,
-        detail: ""
-      }, {
-        title: "",
-        icon: "../static/images/default1.png",
-        type: 2,
-        detail: ""
-      }],
+
       select: 1,
       category_cover: "../static/images/default1.png",
       images: "",
@@ -3430,7 +3426,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         parameter: parameter,
         pictures: image
       };
-
       // 发送到数据库里面去
       __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__api_api__["upload"])(allParams).then(res => {
         if (res.msg == "ok") {
@@ -3456,7 +3451,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       if (groupid) {
         var allParams = "?id=" + groupid;
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__api_api__["oneGet"])(allParams).then(res => {
-          // console.log(res.data.categories)
+          console.log(res);
           this.newone.title = res.data.title;
           this.newone.cover = res.data.cover;
           this.select = res.data.language;
