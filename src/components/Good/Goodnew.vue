@@ -60,6 +60,15 @@
             maxlength="20"
             style="width:500px;"
           ></el-input>
+
+        </el-form-item>
+        <el-form-item label="小标题：" prop="sub_title">
+          <el-input
+            v-model="newone.sub_title"
+            placeholder="请输入产品小标题（20字以内）"
+            maxlength="20"
+            style="width:500px;"
+          ></el-input>
         </el-form-item>
 
         <el-form-item label="产品图片：" prop="cover">
@@ -267,6 +276,7 @@ export default {
       language: [{ key: 1, value: "中文" }, { key: 2, value: "英文" }],
       newone: {
         title: "",
+        sub_title:"",
         material: "",
         cover: "../static/images/default1.png",
         type_id: "",
@@ -447,6 +457,7 @@ addarea() {
         id: this.groupid,
         language: this.select,
         title: this.newone.title,
+        sub_title:this.newone.sub_title,
         type_id: this.newone.type_id,
         cover: this.newone.cover,
         material: this.newone.material,
@@ -484,6 +495,7 @@ addarea() {
         oneGet(allParams).then(res => {
           // console.log(res.data.categories)
           this.newone.title = res.data.title;
+          this.newone.sub_title = res.data.sub_title;
           this.newone.cover = res.data.cover;
           this.select = res.data.language;
           this.newone.type_id = res.data.type_id;

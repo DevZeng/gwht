@@ -100,13 +100,13 @@ export const listGet = params => { return axios.get(`${base}/products` + `${para
 
 // 获取单个产品
 export const oneGet = params => { return axios.get(`${base}/product` + `${params}`).then(res => res.data) }
-
 // 删除产品
 export const listDel = params => { return axios.get(`${base}/del/product` + `${params}`).then(res => res.data) }
 
 // 增加产品 
 export const upload = params => { return axios.post(`${base}/product`, params).then(res => res.data) }
 
+export const setProductSort = params => { return axios.post(`${base}/product/sort`, params).then(res => res.data) }
 
 // 获取全部项目
 export const prolistGet = params => { return axios.get(`${base}/projects` + `${params}`).then(res => res.data) }
