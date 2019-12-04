@@ -160,6 +160,15 @@ export default {
       sessionStorage.removeItem("groupeditid");
       this.$router.push({ path: "/Good/Goodnew" });
     },
+    ExcelSuccess(res, file, fileList) {
+      this.newone.parameter = [];
+      this.newone.parameter.push({
+        uid: fileList[0].uid,
+        url: this.host + res.data.base_url,
+        name: res.data.file_name
+      });
+      // console.log(this.newone.parameter);
+    },
     changeSort(id,val){
       console.log(id)
       console.log(val)

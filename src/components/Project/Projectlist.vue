@@ -37,6 +37,12 @@
             <img :src="scope.row.cover" style="max-width:50px;max-height:50px;" />
           </template>
         </el-table-column>
+        <el-table-column label="排序" width="100" align="center">
+        <template slot-scope="scope">
+          <el-input v-model="scope.row.sort"  size="mini" type="number" min="0" @change="changeSort(scope.row.id,scope.row.sort)" ></el-input>
+          <!-- <div v-if="scope.row.sort">{{scope.row.sort}}</div> -->
+        </template>
+      </el-table-column>
         <!-- <el-table-column prop="products" label="项目关联产品" min-width="140" align="center"></el-table-column> -->
 
         <el-table-column label="操作" min-width="140" align="center">
@@ -75,7 +81,7 @@
 <script>
 import { prolistGet } from "../../api/api";
 import { proDel } from "../../api/api";
-
+import { setProjectSort } from "../../api/api";
 import { Message } from "element-ui";
 
 export default {
@@ -99,7 +105,32 @@ export default {
       sessionStorage.removeItem("groupeditid");
       this.$router.push({ path: "/Project/Projectnew" });
     },
+    changeSort(id,val){
+      console.log(id)
+      console.log(val)
 
+      var allParams = {
+        id: id,
+        sort:val
+      };
+
+      // 发送到数据库里面去
+      setProjectSort(allParams).then(res => {
+        if (res.msg == "ok") {
+          this.$message({
+            message: "提交成功",
+            type: "success"
+          });
+          // this.getlist();
+          // this.$router.push({ path: "/Good/Goodlist" });
+        } else {
+          this.$message({
+            message: res.msg,
+            type: "error"
+          });
+        }
+      });
+    },
     getlist() {
       var allParams =
         "?page=" +

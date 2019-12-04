@@ -114,7 +114,7 @@ export const prolistGet = params => { return axios.get(`${base}/projects` + `${p
 
 // 添加项目
 export const proAdd = params => { return axios.post(`${base}/project`, params).then(res => res.data) }
-
+export const setProjectSort = params => { return axios.post(`${base}/project/sort`, params).then(res => res.data) }
 // 删除项目
 export const proDel = params => { return axios.get(`${base}/del/project` + `${params}`).then(res => res.data) }
 
@@ -223,6 +223,10 @@ export const dataPost = params => { return axios.post(`${base}/data/document`, p
 // 删除资源
 export const dataDel = params => { return axios.get(`${base}/del/data/document` + `${params}`).then(res => res.data) }
 
+export const dataTypePost = params => { return axios.post(`${base}/data/type`, params).then(res => res.data) }
+export const setDataTypeSort = params => { return axios.post(`${base}/data/type/sort`, params).then(res => res.data) }
+export const dataTypeGet = params => { return axios.get(`${base}/data/types` + `${params}`).then(res => res.data) }
+export const dataTypeDel = params => { return axios.get(`${base}/del/data/type` + `${params}`).then(res => res.data) }
 
 
 //快递

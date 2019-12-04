@@ -35,7 +35,7 @@
             <img :src="scope.row.cover" style="max-width:50px;max-height:50px;" />
           </template>
         </el-table-column>
-        <el-table-column prop="detail" label="详情" width="450" align="center"></el-table-column>
+        <!-- <el-table-column prop="detail" label="详情" width="450" align="center"></el-table-column> -->
 
         <el-table-column label="操作" width="450" align="center">
           <template slot-scope="scope">
@@ -82,6 +82,19 @@
             <el-input v-model="nedoc.title" style="max-width: 300px;" placeholder="请输入标题"></el-input>
           </el-form-item>
 
+          <el-form-item label="分类：" prop="type_id">
+            <el-select v-model="type_id" placeholder="请选择分类" >
+              <el-option
+                v-for="item in typeArr"
+                :label="item.title"
+                :value="item.id"
+                :key="item.id"
+              ></el-option>
+            </el-select>
+
+            
+          </el-form-item>
+
           <el-form-item label="图片：" prop="cover">
             <el-upload
               class="upload-demo"
@@ -97,8 +110,20 @@
               />
             </el-upload>
           </el-form-item>
-
-          <el-form-item label="详细内容:" prop="detail" style="margin-bottom: 40px">
+       <el-form-item label="附件：">
+          <el-upload
+            :action="upurl"
+            :data="uptoken"
+            :limit="1"
+            accept=".xlsx"
+            v-model="nedoc.parameter"
+            :on-success="ExcelSuccess"
+            :file-list="nedoc.parameter"
+          >
+            <el-button size="small" type="primary">点击上传</el-button>
+          </el-upload>
+        </el-form-item>
+          <!-- <el-form-item label="详细内容:" prop="detail" style="margin-bottom: 40px">
             <div class="edit_container">
               <quill-editor
                 v-model="nedoc.detail"
@@ -123,7 +148,7 @@
                 >点击上传</el-button>
               </el-upload>
             </div>
-          </el-form-item>
+          </el-form-item> -->
 
           <el-form-item style="margin-left: calc(50% - 180px);">
             <el-button size="small" type="primary" @click="save()">提 交</el-button>
@@ -161,7 +186,7 @@ import { dataGet } from "../../api/api";
 // import {documentGet} from '../../api/api';
 import { dataPost } from "../../api/api";
 import { dataDel } from "../../api/api";
-
+import { dataTypeGet } from "../../api/api";
 import "quill/dist/quill.core.css";
 import "quill/dist/quill.snow.css";
 import "quill/dist/quill.bubble.css";
@@ -185,6 +210,8 @@ export default {
       list: [],
       count: 0,
       limit: 10,
+      type_id:'',
+      typeArr:[],
       dialogNewVisible: false,
       dialogDelVisible: false,
       dialogSeeVisible: false,
@@ -194,7 +221,8 @@ export default {
       nedoc: {
         title: "",
         detail: "",
-        cover: "../static/images/default1.png"
+        cover: "../static/images/default1.png",
+        parameter: []
       },
       language: [{ key: 1, value: "中文" }, { key: 2, value: "英文" }],
 
@@ -251,7 +279,17 @@ export default {
     handleSuccess(res, file) {
       this.nedoc.cover = "";
       this.nedoc.cover = this.host + res.data.base_url;
+      // this.cover = this.host + res.data.base_url;
       console.log(this.nedoc.cover);
+    },
+    ExcelSuccess(res, file, fileList) {
+      this.nedoc.parameter = [];
+      this.nedoc.parameter.push({
+        uid: fileList[0].uid,
+        url: this.host + res.data.base_url,
+        name: res.data.file_name
+      });
+      // console.log(this.newone.parameter);
     },
 
     getLag(index) {
@@ -270,6 +308,13 @@ export default {
         this.$message.error("图片插入失败");
       }
     },
+    getTypelist() {
+      // import { dataTypeGet } from "../../api/api";
+      var allParams = "?page=" + 1 + "&limit=" + 1000;
+      dataTypeGet(allParams).then(res => {
+        this.typeArr = res.data.data;
+      });
+    },
 
     getlist() {
       var allParams =
@@ -284,6 +329,7 @@ export default {
         this.list = res.data.data;
         this.count = res.data.count;
       });
+      
     },
 
     // checkPer() {
@@ -315,11 +361,18 @@ export default {
       this.dialogNewVisible = true;
       this.putorup = "put";
       this.editId = row.id;
+      this.type_id = row.type_id;
+      var excal = [];
+          excal.push({
+            name: row.file_link,
+            url: row.file_link
+          });
       this.nedoc = {
         title: row.title,
         detail: row.detail,
         language: row.select,
-        cover: row.cover
+        cover: row.cover,
+        parameter: excal
       };
     },
 
@@ -329,21 +382,17 @@ export default {
           message: "请输入标题",
           type: "error"
         });
-      } else if (this.nedoc.detail == "") {
-        this.$message({
-          message: "请输入详细内容",
-          type: "error"
-        });
       } else {
-        // this.$refs.nedoc.validate((valid) => {
-        //   if (valid) {
+          var parameter = this.nedoc.parameter[0].url;
         if (this.putorup == "put") {
           var allParams = {
             id: this.editId,
             title: this.nedoc.title,
             detail: this.nedoc.detail,
             cover: this.nedoc.cover,
-            language: this.select
+            language: this.select,
+            type_id : this.type_id,
+            file_link:parameter
           };
         } else {
           var allParams = {
@@ -351,7 +400,9 @@ export default {
             title: this.nedoc.title,
             detail: this.nedoc.detail,
             cover: this.nedoc.cover,
-            language: this.select
+            language: this.select,
+            type_id : this.type_id,
+            file_link:parameter
           };
         }
         console.log(allParams);
@@ -423,6 +474,7 @@ export default {
 
   mounted: function() {
     this.getlist();
+    this.getTypelist();
     // this.checkPer();
   }
 };

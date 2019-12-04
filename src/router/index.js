@@ -41,8 +41,9 @@ import Banner from '@/components/Banner/Banner'
 import MomentList from '@/components/Moment/MomentList'
 
 import DataList from '@/components/Data/DataList'
-
+import DataType from '@/components/Data/DataType'
 import Adert from '@/components/Adert/Adertlist'
+import AdertType from '@/components/Adert/Aderttype'
 
 const Login = resolve => require(['@/components/Login'], resolve)
 
@@ -110,14 +111,15 @@ let router = new Router({
             ]
         },
         {
-            leaf: true,
+            // leaf: true,
             path: '/',
             name: '资源管理',
             component: Home,
-            redirect: '/Data/DataList',
+            redirect: '/Data/DataType',
             menuShow: true,
             iconCls: 'iconfont menu-good',
             children: [
+                { path: '/Data/DataType', component: DataType, name: '资源类型', menuShow: true, meta: { permission: '' } },
                 { path: '/Data/DataList', component: DataList, name: '资源管理', menuShow: true, meta: { permission: '' } },
             ]
         },
@@ -142,62 +144,11 @@ let router = new Router({
             menuShow: true,
             iconCls: 'iconfont menu-guanggao',
             children: [
-                { path: '/Adert/Adertlist', component: Adert, name: '首页广告', menuShow: true, meta: { permission: '' } }
+                // { path: '/Adert/Aderttype', component: AdertType, name: '广告类型', menuShow: true, meta: { permission: '' }},
+                { path: '/Adert/Adertlist', component: Adert, name: '首页广告', menuShow: true, meta: { permission: '' } },
+                
             ]
         },
-
-        // {
-        //     leaf: true,
-        //     path: '/',
-        //     name: '订单管理',
-        //     component: Home,
-        //     redirect: '/Order/Orderlist',
-        //     menuShow: true,
-        //     iconCls: 'iconfont menu-dingdan',
-        //     children: [
-        //     {path: '/Order/Orderlist',component: Orderlist,name: '订单记录',menuShow: true,meta:{permission: ''}}, 
-        //     ]
-        // }, 
-        // {
-        //     leaf: true,
-        //     path: '/',
-        //     name: '用户',
-        //     component: Home,
-        //     redirect: '/User/Userlist',
-        //     menuShow: true,
-        //     iconCls: 'iconfont menu-yonghu',
-        //     children: [
-        //     {path: '/User/Userlist',component: Userlist,name: '用户列表',menuShow: true,meta:{permission: ''}},
-        //     ]
-        // }, 
-
-
-        // {
-        //     leaf: true,
-        //     path: '/',
-        //     name: '分销管理',
-        //     component: Home,
-        //     redirect: '/Agent/Proxylist',
-        //     menuShow: true,
-        //     iconCls: 'iconfont menu-kongzhi',
-        //     children: [
-        //     {path: '/Agent/Proxylist',component: Proxylist,name: '代理列表',menuShow: true,meta:{permission: ''}}, 
-        //     ]
-        // },
-
-        // {
-        //     leaf: true,
-        //     path: '/',
-        //     name: '分销申请',
-        //     component: Home,
-        //     redirect: '/Agent/Joinlist',
-        //     menuShow: true,
-        //     iconCls: 'iconfont menu-kongzhi',
-        //     children: [
-        //     {path: '/Agent/Joinlist',component: Joinlist,name: '分销申请',menuShow: true,meta:{permission: ''}}, 
-        //     ]
-        // },
-
         {
             // leaf: true,
             path: '/',
