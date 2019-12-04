@@ -100,7 +100,7 @@
             </el-select>
           </el-form-item>
 
-          <el-form-item label="广告产品：">
+          <el-form-item label="广告产品：" v-if="adv_type!=5">
             <el-select v-model="pro_id" placeholder="请选择">
               <el-option
                 v-for="item in pro_list"
@@ -110,6 +110,17 @@
               ></el-option>
             </el-select>
           </el-form-item>
+
+          <el-form-item label="跳转链接：" prop="link" v-if="adv_type==5">
+          <el-input
+            v-model="link"
+            placeholder="请输入跳转链接"
+            maxlength="20"
+            style="width:500px;"
+          ></el-input>
+
+        </el-form-item>
+
           <el-form-item label="上传图片：">
             <el-upload
               class="upload-demo"
@@ -172,6 +183,7 @@ export default {
       list: [],
       count: 0,
       limit: 10,
+      link:"",
 
       dialogNewVisible: false,
       dialogDelVisible: false,
@@ -186,7 +198,8 @@ export default {
         { key: 1, value: "产品" },
         { key: 2, value: "项目" },
         { key: 3, value: "动态" },
-        { key: 4, value: "资料" }
+        { key: 4, value: "资料" },
+        { key: 5, value: "外部链接" }
       ],
       adv_type: "",
 
@@ -283,14 +296,16 @@ export default {
             id: this.editId,
             type: this.adv_type,
             language: this.select,
-            param: this.pro_id
+            param: this.pro_id,
+            link:this.link
           };
         } else {
           var allParams = {
             type: this.adv_type,
             href: this.imgSrc,
             language: this.select,
-            param: this.pro_id
+            param: this.pro_id,
+            link:this.link
           };
         }
 
