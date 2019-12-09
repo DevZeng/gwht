@@ -115,7 +115,7 @@
           <el-input
             v-model="link"
             placeholder="请输入跳转链接"
-            maxlength="20"
+            maxlength="200"
             style="width:500px;"
           ></el-input>
 
@@ -183,7 +183,7 @@ export default {
       list: [],
       count: 0,
       limit: 10,
-      link:"",
+      link:"https://",
 
       dialogNewVisible: false,
       dialogDelVisible: false,

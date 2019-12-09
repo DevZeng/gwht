@@ -78,11 +78,8 @@
               ></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="标题：" prop="title">
-            <el-input v-model="nedoc.title" style="max-width: 300px;" placeholder="请输入标题"></el-input>
-          </el-form-item>
 
-          <el-form-item label="分类：" prop="type_id">
+<el-form-item label="分类：" prop="type_id">
             <el-select v-model="type_id" placeholder="请选择分类" >
               <el-option
                 v-for="item in typeArr"
@@ -94,6 +91,12 @@
 
             
           </el-form-item>
+
+          <el-form-item label="标题：" prop="title">
+            <el-input v-model="nedoc.title" style="max-width: 300px;" placeholder="请输入标题"></el-input>
+          </el-form-item>
+
+          
 
           <el-form-item label="图片：" prop="cover">
             <el-upload
@@ -221,7 +224,7 @@ export default {
       nedoc: {
         title: "",
         detail: "",
-        cover: "../static/images/default1.png",
+        cover: "http://111.230.135.20/static/images/default1.png",
         parameter: []
       },
       language: [{ key: 1, value: "中文" }, { key: 2, value: "英文" }],

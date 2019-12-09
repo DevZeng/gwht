@@ -114,6 +114,66 @@
 
             <el-button type="primary" class="postbtn" size="small" @click="savelink()">提交</el-button>
           </el-tab-pane>
+          <el-tab-pane label="首页封面" name="homePic">
+             <el-form label-width="120px">
+              <el-form-item label="全系列：" >
+                <el-upload
+              class="upload-demo"
+              :action="upurl"
+              :data="uptoken"
+              :on-success="linkSuccess4"
+              :show-file-list="false"
+              accept="image/*"
+            >
+              <img
+                :src="all_bg"
+                class="pre-img"
+                style="width:200px;height:200px;border:1px dashed #ccc;border-radius:6px;display: block;margin-top: 1px;"
+              />
+            </el-upload>
+              </el-form-item>
+
+              <el-form-item label="实验品：" >
+                <el-upload
+              class="upload-demo"
+              :action="upurl"
+              :data="uptoken"
+              :on-success="linkSuccess5"
+              :show-file-list="false"
+              accept="image/*"
+            >
+              <img
+                :src="test_bg"
+                class="pre-img"
+                style="width:200px;height:200px;border:1px dashed #ccc;border-radius:6px;display: block;margin-top: 1px;"
+              />
+            </el-upload>
+              </el-form-item>
+
+
+              <el-form-item label="新品：" >
+                <el-upload
+              class="upload-demo"
+              :action="upurl"
+              :data="uptoken"
+              :on-success="linkSuccess6"
+              :show-file-list="false"
+              accept="image/*"
+            >
+              <img
+                :src="new_bg"
+                class="pre-img"
+                style="width:200px;height:200px;border:1px dashed #ccc;border-radius:6px;display: block;margin-top: 1px;"
+              />
+            </el-upload>
+              </el-form-item>
+              
+            </el-form>
+            
+
+
+            <el-button type="primary" class="postbtn" size="small" @click="savebg()">提交</el-button>
+          </el-tab-pane>
         </el-tabs>
       </el-row>
     </el-col>
@@ -179,6 +239,9 @@ export default {
       ins_bg: "",
       weibo_title: "",
       weibo_bg: "",
+      all_bg: "",
+      test_bg: "",
+      new_bg: "",
 
       switch: 0
     };
@@ -265,6 +328,15 @@ export default {
     linkSuccess2(res, file) {
       this.ins_bg = qiniu.hosturl + res.data.base_url;
     },
+    linkSuccess4(res, file) {
+      this.all_bg = qiniu.hosturl + res.data.base_url;
+    },
+    linkSuccess5(res, file) {
+      this.test_bg = qiniu.hosturl + res.data.base_url;
+    },
+    linkSuccess6(res, file) {
+      this.new_bg = qiniu.hosturl + res.data.base_url;
+    },
     linkSuccess3(res, file) {
       this.weibo_bg = qiniu.hosturl + res.data.base_url;
     },
@@ -314,6 +386,27 @@ export default {
         }
       });
     },
+    savebg() {
+      var allParams = {
+        all_bg: this.all_bg,
+        test_bg: this.test_bg,
+        new_bg:this.new_bg,
+      };
+      baseset(allParams).then(res => {
+        if (res.msg === "ok") {
+          this.getconfig();
+          this.$message({
+            message: "提交成功",
+            type: "success"
+          });
+        } else {
+          this.$message({
+            message: res.msg,
+            type: "error"
+          });
+        }
+      });
+    },
 
     getconfig() {
       var allParams = "";
@@ -338,6 +431,15 @@ export default {
             : "../static/images/default.png";
           this.weibo_bg = res.data.weibo_bg
             ? res.data.weibo_bg
+            : "../static/images/default.png";
+          this.all_bg = res.data.all_bg
+            ? res.data.all_bg
+            : "../static/images/default.png";
+          this.new_bg = res.data.new_bg
+            ? res.data.new_bg
+            : "../static/images/default.png";
+          this.test_bg = res.data.test_bg
+            ? res.data.test_bg
             : "../static/images/default.png";
         } else {
           this.$message({
