@@ -131,6 +131,19 @@
                 style="width:200px;height:200px;border:1px dashed #ccc;border-radius:6px;display: block;margin-top: 1px;"
               />
             </el-upload>
+            <el-input
+            v-model="all_title"
+              placeholder="请输入标题"
+              style="margin-top:10px;width: 300px;display: block;"
+            ></el-input>
+
+            <el-input
+            
+              type="textarea"
+              :rows="3"
+              placeholder="请输入内容"
+              v-model="all_content">
+            </el-input>
               </el-form-item>
 
               <el-form-item label="实验品：" >
@@ -242,7 +255,8 @@ export default {
       all_bg: "",
       test_bg: "",
       new_bg: "",
-
+      all_content:"",
+      all_title:"",
       switch: 0
     };
   },
@@ -391,6 +405,8 @@ export default {
         all_bg: this.all_bg,
         test_bg: this.test_bg,
         new_bg:this.new_bg,
+        all_title:this.all_title,
+        all_content:this.all_content
       };
       baseset(allParams).then(res => {
         if (res.msg === "ok") {
@@ -441,6 +457,8 @@ export default {
           this.test_bg = res.data.test_bg
             ? res.data.test_bg
             : "../static/images/default.png";
+            this.all_title = res.data.all_title ? res.data.all_title : "";
+            this.all_content = res.data.all_content ? res.data.all_content : "";
         } else {
           this.$message({
             message: res.msg,
