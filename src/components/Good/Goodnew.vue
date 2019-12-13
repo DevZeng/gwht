@@ -410,48 +410,13 @@ addarea() {
     // 上传信息
 
     save() {
-      // if (this.newone.language == "") {
-      //   this.newone.language = 1;
-      // } else if (this.newone.type_id == "") {
-      //   Message({
-      //     message: "请选择分类",
-      //     type: "error"
-      //   });
-      // } else if (this.newone.title == "") {
-      //   Message({
-      //     message: "请输入标题",
-      //     type: "error"
-      //   });
-      // } else if (this.newone.cover == "") {
-      //   Message({
-      //     message: "请上传产品图片",
-      //     type: "error"
-      //   });
-      // } else if (this.newone.material == "") {
-      //   Message({
-      //     message: "请输入产品材料",
-      //     type: "error"
-      //   });
-      // }
-      // else if(this.newo)
-      // var aaa = this.newone.pictures;
-      // var images = [];
-      // for (var i = 0; i < aaa.length; i++) {
-      //   if (typeof aaa[i] == "object") {
-      //     images.push(aaa[i].url);
-      //   } else {
-      //     images.push(aaa[i]);
-      //   }
-      // }
-
-      // allParams.pictures = images;
       var image = [];
       // 处理image
       for (var i = 0; i < this.newone.pictures.length; i++) {
-        // console.log(this.newone.pictures[i].url);
+        console.log(this.newone.pictures[i].url);
         image.push(this.newone.pictures[i].url);
       }
-      var parameter = this.newone.parameter[0].url;
+      var parameter =this.newone.parameter[0]?this.newone.parameter[0].url:'';
 
       var allParams = {
         id: this.groupid,
