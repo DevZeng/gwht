@@ -210,11 +210,12 @@
             :on-remove="handleRemove"
             :on-success="handlelistSuccess"
             accept="image/*"
+            class="upload-img"
           >
             <img
               src="../../../static/images/default1.png"
               class="pre-img"
-              style="width:145px;height:144px;margin-top: 1px;display: block"
+              style="width:321px;height:180px;margin-top: 1px;display: block"
             />
           </el-upload>
         </el-form-item>
@@ -528,4 +529,5 @@ addarea() {
   height: 600px;
   margin-bottom: 70px;
 }
+
 </style>
