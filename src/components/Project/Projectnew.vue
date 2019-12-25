@@ -87,7 +87,7 @@
         </el-form-item>
 
         <el-form-item label="关联产品：">
-          <el-checkbox-group v-model="newone.pro_id"  :max="4">
+          <el-checkbox-group v-model="newone.pro_id"  >
             <el-checkbox-button
               v-for="item in newone.products"
               :key="item.key"

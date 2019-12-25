@@ -233,6 +233,16 @@
             <el-button size="small" type="primary">点击上传</el-button>
           </el-upload>
         </el-form-item>
+        <el-form-item label="类似产品：">
+          <el-checkbox-group v-model="newone.pro_id"  >
+            <el-checkbox-button
+              v-for="item in newone.products"
+              :key="item.key"
+              :label="item.key"
+              border
+            >{{item.title}}</el-checkbox-button>
+          </el-checkbox-group>
+        </el-form-item>
         <el-form-item style="margin-top: 20px;">
           <el-button type="primary" @click="save()" size="mini">提交</el-button>
           <el-button @click="golist()" size="mini">取 消</el-button>
@@ -255,6 +265,7 @@ import { Message } from "element-ui";
 import { upload } from "../../api/api";
 
 import { oneGet } from "../../api/api";
+import { listGet } from "../../api/api";
 
 import "quill/dist/quill.core.css";
 import "quill/dist/quill.snow.css";
@@ -283,7 +294,10 @@ export default {
         type_id: "",
         pictures: [],
         language: "",
-        parameter: []
+        parameter: [],
+        products: [],
+
+        pro_id: []
       },
       areas: [
         
@@ -325,6 +339,20 @@ export default {
       var allParams = "?page=1&&limit=999&&parent_id=" + parent_id;
       typeGet(allParams).then(res => {
         this.parentArr = res.data.data;
+      });
+    },
+    getProduct() {
+      var allParams = "?page=1&limit=10&language=" + this.select;
+      listGet(allParams).then(res => {
+        if (res.msg === "ok") {
+          this.newone.products = [];
+          for (let i = 0; i < res.data.data.length; i++) {
+            this.newone.products.push({
+              key: res.data.data[i].id,
+              title: res.data.data[i].title
+            });
+          }
+        }
       });
     },
 
@@ -431,8 +459,11 @@ addarea() {
         category_cover: this.category_cover,
         areas: this.areas,
         parameter: parameter,
-        pictures: image
+        pictures: image,
+        similar: this.newone.pro_id
       };
+      // console.log(allParams)
+
 
       // 发送到数据库里面去
       upload(allParams).then(res => {
@@ -470,6 +501,7 @@ addarea() {
           this.category_cover = res.data.category_cover;
           this.categories = res.data.categories;
           this.parent_id = res.data.parent_id;
+          this.newone.pro_id = res.data.similar_id;
           // console.log(res.data.areas);
           // 处理区域
           var area = [];
@@ -518,6 +550,7 @@ addarea() {
   mounted: function() {
     this.gettype();
     this.checkid();
+    this.getProduct();
   }
 };
 </script>
