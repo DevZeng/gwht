@@ -30,13 +30,20 @@
         <el-table-column prop="parent" label="上级" width="200" align="center"></el-table-column>
 
         <el-table-column label="排序" width="100" align="center">
-                  <template slot-scope="scope">
-                    <el-input v-model="scope.row.sort"  size="mini" type="number" min="0" @change="changeSort(scope.row.id,scope.row.sort)" ></el-input>
-                    <!-- <div v-if="scope.row.sort">{{scope.row.sort}}</div> -->
-                  </template>
-                </el-table-column>
+          <template slot-scope="scope">
+            <el-input
+              style="width:100%"
+              v-model="scope.row.sort"
+              size="mini"
+              type="number"
+              min="0"
+              @change="changeSort(scope.row.id,scope.row.sort)"
+            ></el-input>
+            <!-- <div v-if="scope.row.sort">{{scope.row.sort}}</div> -->
+          </template>
+        </el-table-column>
 
-        <el-table-column label="操作" width="200" align="center">
+        <el-table-column label="操作" width="200px" align="center">
           <template slot-scope="scope">
             <el-button type="primary" size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
 
@@ -157,8 +164,6 @@
             </div>
           </el-form-item>
 
-          
-
           <el-form-item style="margin-left: calc(50% - 200px);">
             <el-button size="small" type="primary" @click="save()">保 存</el-button>
             <el-button size="small" @click="dialogNewVisible = false">取 消</el-button>
@@ -271,15 +276,15 @@ export default {
   },
 
   methods: {
-    changeSort(id,val){
-      console.log(id)
-      console.log(val)
+    changeSort(id, val) {
+      console.log(id);
+      console.log(val);
 
       var allParams = {
         id: id,
-        sort:val
+        sort: val
       };
-      console.log(allParams)
+      console.log(allParams);
 
       // 发送到数据库里面去
       setTypeSort(allParams).then(res => {

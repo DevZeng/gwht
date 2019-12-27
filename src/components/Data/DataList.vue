@@ -79,8 +79,8 @@
             </el-select>
           </el-form-item>
 
-<el-form-item label="分类：" prop="type_id">
-            <el-select v-model="type_id" placeholder="请选择分类" >
+          <el-form-item label="分类：" prop="type_id">
+            <el-select v-model="type_id" placeholder="请选择分类">
               <el-option
                 v-for="item in typeArr"
                 :label="item.title"
@@ -88,15 +88,11 @@
                 :key="item.id"
               ></el-option>
             </el-select>
-
-            
           </el-form-item>
 
           <el-form-item label="标题：" prop="title">
             <el-input v-model="nedoc.title" style="max-width: 300px;" placeholder="请输入标题"></el-input>
           </el-form-item>
-
-          
 
           <el-form-item label="图片：" prop="cover">
             <el-upload
@@ -113,19 +109,19 @@
               />
             </el-upload>
           </el-form-item>
-       <el-form-item label="附件：">
-          <el-upload
-            :action="upurl"
-            :data="uptoken"
-            :limit="1"
-            accept=".xlsx"
-            v-model="nedoc.parameter"
-            :on-success="ExcelSuccess"
-            :file-list="nedoc.parameter"
-          >
-            <el-button size="small" type="primary">点击上传</el-button>
-          </el-upload>
-        </el-form-item>
+          <el-form-item label="附件：">
+            <el-upload
+              :action="upurl"
+              :data="uptoken"
+              :limit="1"
+              accept=".xlsx"
+              v-model="nedoc.parameter"
+              :on-success="ExcelSuccess"
+              :file-list="nedoc.parameter"
+            >
+              <el-button size="small" type="primary">点击上传</el-button>
+            </el-upload>
+          </el-form-item>
           <!-- <el-form-item label="详细内容:" prop="detail" style="margin-bottom: 40px">
             <div class="edit_container">
               <quill-editor
@@ -151,7 +147,7 @@
                 >点击上传</el-button>
               </el-upload>
             </div>
-          </el-form-item> -->
+          </el-form-item>-->
 
           <el-form-item style="margin-left: calc(50% - 180px);">
             <el-button size="small" type="primary" @click="save()">提 交</el-button>
@@ -213,8 +209,8 @@ export default {
       list: [],
       count: 0,
       limit: 10,
-      type_id:'',
-      typeArr:[],
+      type_id: "",
+      typeArr: [],
       dialogNewVisible: false,
       dialogDelVisible: false,
       dialogSeeVisible: false,
@@ -332,7 +328,6 @@ export default {
         this.list = res.data.data;
         this.count = res.data.count;
       });
-      
     },
 
     // checkPer() {
@@ -366,10 +361,10 @@ export default {
       this.editId = row.id;
       this.type_id = row.type_id;
       var excal = [];
-          excal.push({
-            name: row.file_link,
-            url: row.file_link
-          });
+      excal.push({
+        name: row.file_link,
+        url: row.file_link
+      });
       this.nedoc = {
         title: row.title,
         detail: row.detail,
@@ -386,7 +381,7 @@ export default {
           type: "error"
         });
       } else {
-          var parameter = this.nedoc.parameter[0].url;
+        var parameter = this.nedoc.parameter[0].url;
         if (this.putorup == "put") {
           var allParams = {
             id: this.editId,
@@ -394,8 +389,8 @@ export default {
             detail: this.nedoc.detail,
             cover: this.nedoc.cover,
             language: this.select,
-            type_id : this.type_id,
-            file_link:parameter
+            type_id: this.type_id,
+            file_link: parameter
           };
         } else {
           var allParams = {
@@ -404,8 +399,8 @@ export default {
             detail: this.nedoc.detail,
             cover: this.nedoc.cover,
             language: this.select,
-            type_id : this.type_id,
-            file_link:parameter
+            type_id: this.type_id,
+            file_link: parameter
           };
         }
         console.log(allParams);

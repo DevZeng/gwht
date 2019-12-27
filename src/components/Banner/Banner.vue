@@ -66,14 +66,8 @@
       >
         <el-form ref="newadv" :model="newadv" label-width="120px">
           <el-form-item label="跳转链接：" prop="link">
-          <el-input
-            v-model="link"
-            placeholder="请输入跳转链接"
-            maxlength="20"
-            style="width:500px;"
-          ></el-input>
-
-        </el-form-item>
+            <el-input v-model="link" placeholder="请输入跳转链接" style="width:500px;"></el-input>
+          </el-form-item>
           <el-form-item label="上传图片：">
             <el-upload
               class="upload-demo"
@@ -144,7 +138,7 @@ export default {
       postarr: [],
       editId: "",
       delId: "",
-      link:"",
+      link: "",
 
       goodData: [],
 
@@ -198,7 +192,7 @@ export default {
         if (this.putorup == "put") {
           var allParams = {
             href: this.imgSrc,
-            link:this.link,
+            link: this.link,
             id: this.editId,
             group_id: this.group_id
           };
@@ -206,7 +200,7 @@ export default {
           var allParams = {
             href: this.imgSrc,
             group_id: this.group_id,
-            link:this.link,
+            link: this.link
           };
         }
 

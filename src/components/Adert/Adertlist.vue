@@ -44,7 +44,7 @@
 
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
-              <!-- <el-button type="primary" size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button> -->
+              <el-button type="primary" size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
               <el-button
                 type="danger"
                 size="small"
@@ -112,29 +112,23 @@
           </el-form-item>
 
           <el-form-item label="跳转链接：" prop="link" v-if="adv_type==5">
-          <el-input
-            v-model="link"
-            placeholder="请输入跳转链接"
-            maxlength="200"
-            style="width:500px;"
-          ></el-input>
-
-        </el-form-item>
+            <el-input v-model="link" placeholder="请输入跳转链接" maxlength="200" style="width:400px;"></el-input>
+          </el-form-item>
 
           <el-form-item label="上传图片：">
             <el-upload
               class="upload-demo"
-              list-type="picture-card"
               :action="upurl"
               :data="uptoken"
               :on-success="handleSuccess"
               :on-exceed="handleExceed"
-              :file-list="postarr"
               :limit="1"
               :show-file-list="true"
               accept="image/*"
             >
-              <i class="el-icon-plus"></i>
+              <div style="width:150px;border:1px solid #ccc;">
+                <img :src="imgSrc" alt style="width:100%;display:block " />
+              </div>
               <div slot="tip" class="el-upload__tip">可上传JPG/PNG文件，建议图片比例为16:9</div>
             </el-upload>
           </el-form-item>
@@ -183,13 +177,13 @@ export default {
       list: [],
       count: 0,
       limit: 10,
-      link:"https://",
+      link: "https://",
 
       dialogNewVisible: false,
       dialogDelVisible: false,
 
       putorup: "up",
-      imgSrc: "",
+      imgSrc: "../../../static/images/default.png",
       language: [{ key: 1, value: "中文" }, { key: 2, value: "英文" }],
       select: 1,
 
@@ -240,7 +234,6 @@ export default {
     },
 
     getPro() {
-      console.log(this.pro_id);
       this.pro_id = "";
       let allParams =
         "?page=" + this.currentPage + "&limit=" + this.limit + "&language=1";
@@ -272,6 +265,9 @@ export default {
     newone() {
       this.putorup = "up";
       this.postarr = [];
+      this.link = "";
+      this.adv_type = "";
+      this.imgSrc = "../../../static/images/default1.png";
       (this.diatitle = "新增广告"), (this.dialogNewVisible = true);
     },
 
@@ -297,15 +293,15 @@ export default {
             type: this.adv_type,
             language: this.select,
             param: this.pro_id,
-            link:this.link
+            link: this.link
           };
         } else {
           var allParams = {
             type: this.adv_type,
             href: this.imgSrc,
             language: this.select,
-            param: this.pro_id,
-            link:this.link
+            param: this.pro,
+            link: this.link
           };
         }
 
@@ -335,7 +331,12 @@ export default {
       this.editId = row.id;
       this.imgSrc = row.href;
       this.pro_id = row.pro_id;
-      console.log(row.id);
+      this.link = row.link;
+      this.adv_type = row.type;
+      this.param = row.param;
+
+      this.getPro();
+      console.log(row);
     },
 
     handleDelete(index, row) {

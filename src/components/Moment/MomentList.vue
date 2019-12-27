@@ -13,12 +13,12 @@
     <el-col :span="24" class="warp-main">
       <el-form :inline="true">
         <el-form-item>
-          <el-button type="primary" size="mini" @click="newone">新增动态</el-button>
+          <el-button type="primary" size="mini" @click="newone()">新增动态</el-button>
         </el-form-item>
         <el-form-item label="动态语言：">
           <el-select v-model="select" placheolder="全部" @change="listLay">
             <el-option
-              v-for="item in nedoc.language"
+              v-for="item in language"
               :label="item.value"
               :value="item.key"
               :key="item.key"
@@ -66,15 +66,15 @@
         center
         style="min-width: 800px"
       >
-        <el-form ref="nedoc" :model="nedoc" label-width="120px" :rules="rules" status-icon>
-          <el-form-item label="动态语言：" prop="language">
+        <el-form ref="nedoc" :model="nedoc" label-width="120px" :rules="rules">
+          <el-form-item label="语言选择" prop="language">
             <el-select v-model="select" placheolder="请选择语言" @change="getLag">
               <el-option
-                v-for="item in nedoc.language"
+                v-for="item in language"
                 :label="item.value"
                 :value="item.key"
                 :key="item.key"
-              ></el-option>
+              >{{item.value}}</el-option>
             </el-select>
           </el-form-item>
 
@@ -91,10 +91,9 @@
               :show-file-list="false"
               accept="image/*"
             >
-              <img
-                :src="nedoc.cover"
-                style="width:146px;height:146px;border:1px dashed #ccc;border-radius:6px;margin-top: 1px;"
-              />
+              <div style="width:146px;border:1px dashed #ccc;border-radius:6px;">
+                <img :src="cover" alt style="width:100% ;display:block " />
+              </div>
             </el-upload>
           </el-form-item>
 
@@ -193,10 +192,10 @@ export default {
       diatitle: "新增文档",
       nedoc: {
         title: "",
-        detail: "",
-        language: [{ key: 1, value: "中文" }, { key: 2, value: "英文" }],
-        cover: "../static/images/default1.png"
+        detail: ""
       },
+      cover: "../../../static/images/default.png",
+      language: [{ key: 1, value: "中文" }, { key: 2, value: "英文" }],
       select: 1,
       rules: {
         title: [{ required: true, trigger: "blur", message: "请输入文档标题" }],
@@ -248,8 +247,8 @@ export default {
 
   methods: {
     handleSuccess(res, file) {
-      this.nedoc.cover = "";
-      this.nedoc.cover = this.host + res.data.base_url;
+      this.cover = "";
+      this.cover = this.host + res.data.base_url;
     },
 
     listLay(value) {
@@ -299,6 +298,7 @@ export default {
     },
 
     newone() {
+      this.nedoc.cover = "../../../static/images/default.png";
       this.putorup = "up";
       (this.diatitle = "新增文档"),
         (this.dialogNewVisible = true),
@@ -327,9 +327,9 @@ export default {
       this.nedoc = {
         title: row.title,
         detail: row.detail,
-        language: row.language,
-        cover: row.cover
+        language: row.language
       };
+      this.cover = row.cover;
     },
 
     save() {
@@ -351,14 +351,14 @@ export default {
             title: this.nedoc.title,
             id: this.editId,
             detail: this.nedoc.detail,
-            cover: this.nedoc.cover,
+            cover: this.cover,
             language: this.select
           };
         } else {
           var allParams = {
             title: this.nedoc.title,
             detail: this.nedoc.detail,
-            cover: this.nedoc.cover,
+            cover: this.cover,
             language: this.select
           };
         }

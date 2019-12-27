@@ -33,12 +33,7 @@
 
         <el-form-item label="上级分类：" prop="parent_id">
           <el-select v-model="parent_id" placeholder="请选择分类" @change="getPid">
-            <el-option
-              v-for="item in typeArr"
-              :label="item.title"
-              :value="item.id"
-              :key="item.id"
-            ></el-option>
+            <el-option v-for="item in typeArr" :label="item.title" :value="item.id" :key="item.id"></el-option>
           </el-select>
         </el-form-item>
 
@@ -60,7 +55,6 @@
             maxlength="20"
             style="width:500px;"
           ></el-input>
-
         </el-form-item>
         <el-form-item label="小标题：" prop="sub_title">
           <el-input
@@ -155,38 +149,36 @@
           </el-upload>
         </el-form-item>
 
-
-
-<el-form-item label="区域：">
+        <el-form-item label="区域：">
           <div v-for="(item, index) in areas" :key="index">
             <div style="display:inline-block;">
-            <el-form-item label="区域名称：">
-              <el-input
-                v-model="item.title"
-                maxlength="20"
-                placeholder="请输入区域名称"
-                style="width:300px; "
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="区域图片：">
-              <el-upload
-                accept="image/*"
-                :action="upurl"
-                :data="uptoken"
-                v-model="areas[index].icon"
-                :onBind="index"
-                :on-success="HomeSuccess"
-                :show-file-list="false"
-              >
-                <img
-                  :src="areas[index].icon"
-                  class="pre-img"
-                  style="width:146px;height:146px;border:1px dashed #ccc;border-radius:6px;display: block;margin-top: 1px;"
-                />
-              </el-upload>
-            </el-form-item>
-          </div>
+              <el-form-item label="区域名称：">
+                <el-input
+                  v-model="item.title"
+                  maxlength="20"
+                  placeholder="请输入区域名称"
+                  style="width:300px; "
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="区域图片：">
+                <el-upload
+                  accept="image/*"
+                  :action="upurl"
+                  :data="uptoken"
+                  v-model="areas[index].icon"
+                  :onBind="index"
+                  :on-success="HomeSuccess"
+                  :show-file-list="false"
+                >
+                  <img
+                    :src="areas[index].icon"
+                    class="pre-img"
+                    style="width:146px;border:1px dashed #ccc;border-radius:6px;display: block;margin-top: 1px;"
+                  />
+                </el-upload>
+              </el-form-item>
             </div>
+          </div>
           <el-button
             @click.prevent="addarea()"
             type="primary"
@@ -194,11 +186,6 @@
             style="margin-top: 10px;"
           >新增区域</el-button>
         </el-form-item>
-
-        
-
-
-        
 
         <el-form-item label="图片展示：">
           <el-upload
@@ -215,7 +202,7 @@
             <img
               src="../../../static/images/default1.png"
               class="pre-img"
-              style="width:321px;height:180px;margin-top: 1px;display: block"
+              style="width:146px;height:150px;margin-top: 1px;display: block"
             />
           </el-upload>
         </el-form-item>
@@ -234,7 +221,7 @@
           </el-upload>
         </el-form-item>
         <el-form-item label="类似产品：">
-          <el-checkbox-group v-model="newone.pro_id"  >
+          <el-checkbox-group v-model="newone.pro_id">
             <el-checkbox-button
               v-for="item in newone.products"
               :key="item.key"
@@ -288,7 +275,7 @@ export default {
       language: [{ key: 1, value: "中文" }, { key: 2, value: "英文" }],
       newone: {
         title: "",
-        sub_title:"",
+        sub_title: "",
         material: "",
         cover: "../static/images/default1.png",
         type_id: "",
@@ -299,9 +286,7 @@ export default {
 
         pro_id: []
       },
-      areas: [
-        
-      ],
+      areas: [],
       select: 1,
       category_cover: "../static/images/default1.png",
       images: "",
@@ -380,13 +365,13 @@ export default {
         ]
       });
     },
-addarea() {
+    addarea() {
       this.areas.push({
-          title: "",
-          icon: "../static/images/default1.png",
-          type: 1,
-          detail: ""
-        });
+        title: "",
+        icon: "../static/images/default1.png",
+        type: 1,
+        detail: ""
+      });
     },
     // 图片上传
 
@@ -415,18 +400,18 @@ addarea() {
 
     handleRemove(file, fileList) {
       console.log(file);
-      console.log(fileList)
+      console.log(fileList);
       // fileList.remor
-  this.newone.pictures=[]
-  for(var i=0;i<fileList.length;i++){
-    this.newone.pictures.push(fileList[i])
-  //   // if(fileList[i].response.key !== 1){
-  //   //   this.newone.pictures.push(qiniu.hosturl+ fileList[i].response.key)
-  //   // }else {
-      
-  //   // }
-  }
-},
+      this.newone.pictures = [];
+      for (var i = 0; i < fileList.length; i++) {
+        this.newone.pictures.push(fileList[i]);
+        //   // if(fileList[i].response.key !== 1){
+        //   //   this.newone.pictures.push(qiniu.hosturl+ fileList[i].response.key)
+        //   // }else {
+
+        //   // }
+      }
+    },
     handlelistSuccess(res, file, fileList) {
       // this.newone.pictures.push({url:response.message})
       this.newone.pictures.push({
@@ -445,13 +430,15 @@ addarea() {
         console.log(this.newone.pictures[i].url);
         image.push(this.newone.pictures[i].url);
       }
-      var parameter =this.newone.parameter[0]?this.newone.parameter[0].url:'';
+      var parameter = this.newone.parameter[0]
+        ? this.newone.parameter[0].url
+        : "";
 
       var allParams = {
         id: this.groupid,
         language: this.select,
         title: this.newone.title,
-        sub_title:this.newone.sub_title,
+        sub_title: this.newone.sub_title,
         type_id: this.newone.type_id,
         cover: this.newone.cover,
         material: this.newone.material,
@@ -463,7 +450,6 @@ addarea() {
         similar: this.newone.pro_id
       };
       // console.log(allParams)
-
 
       // 发送到数据库里面去
       upload(allParams).then(res => {
@@ -512,7 +498,7 @@ addarea() {
               type: res.data.areas[i].type,
               detail: ""
             });
-            console.log(res.data.areas[i])
+            console.log(res.data.areas[i]);
           }
           this.areas = area;
           console.log(this.newone.areas);
@@ -562,5 +548,4 @@ addarea() {
   height: 600px;
   margin-bottom: 70px;
 }
-
 </style>
