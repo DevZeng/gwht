@@ -205,6 +205,7 @@ export const momentsGet = params => { return axios.get(`${base}/moments` + `${pa
 export const momentPost = params => { return axios.post(`${base}/moment`, params).then(res => res.data) }
 export const momentDel = params => { return axios.get(`${base}/del/moment` + `${params}`).then(res => res.data) }
 
+export const setMomentSort = params => { return axios.post(`${base}/moment/sort`, params).then(res => res.data) }
 
 // 广告管理
 export const AdvertsGet = params => { return axios.get(`${base}/adverts` + `${params}`).then(res => res.data) }
