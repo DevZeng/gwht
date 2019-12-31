@@ -246,11 +246,12 @@ export default {
           this.pro_list = res.data.data;
         });
       } else if (this.adv_type == 3) {
-        dataGet(allParams).then(res => {
+        momentsGet(allParams).then(res => {
           this.pro_list = res.data.data;
         });
       } else if (this.adv_type == 4) {
-        momentsGet(allParams).then(res => {
+        
+        dataGet(allParams).then(res => {
           this.pro_list = res.data.data;
         });
       }
