@@ -16,6 +16,16 @@
           <el-form-item>
             <el-button type="primary" size="mini" @click="newone">新增轮播</el-button>
           </el-form-item>
+          <el-form-item label="语言选择：" prop="language">
+            <el-select v-model="select" placheolder="请选择语言" @change="getLag">
+              <el-option
+                v-for="item in language"
+                :label="item.value"
+                :value="item.key"
+                :key="item.key"
+              ></el-option>
+            </el-select>
+          </el-form-item>
         </el-form>
 
         <el-table :data="list" border stripe size="small" style="width:801px">
@@ -65,8 +75,40 @@
         style="min-width: 500px"
       >
         <el-form ref="newadv" :model="newadv" label-width="120px">
-          <el-form-item label="跳转链接：" prop="link">
-            <el-input v-model="link" placeholder="请输入跳转链接" style="width:500px;"></el-input>
+          <el-form-item label="语言选择：" prop="language">
+            <el-select v-model="select" placheolder="请选择语言" @change="getLag">
+              <el-option
+                v-for="item in language"
+                :label="item.value"
+                :value="item.key"
+                :key="item.key"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="轮播类型：">
+            <el-select v-model="adv_type" placeholder="请选择" @change="getPro()">
+              <el-option
+                v-for="item in adv_list"
+                :key="item.key"
+                :label="item.value"
+                :value="item.key"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="轮播产品：" v-if="adv_type!=5">
+            <el-select v-model="pro_id" placeholder="请选择">
+              <el-option
+                v-for="item in pro_list"
+                :key="item.id"
+                :label="item.title"
+                :value="item.id"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="跳转链接：" prop="link" v-if="adv_type==5">
+            <el-input v-model="link" placeholder="请输入跳转链接" maxlength="200" style="width:400px;"></el-input>
           </el-form-item>
           <el-form-item label="上传图片：">
             <el-upload
@@ -111,7 +153,10 @@
 import { BannersGet } from "../../api/api";
 import { BannerPost } from "../../api/api";
 import { BannerDel } from "../../api/api";
-
+import { listGet } from "../../api/api";
+import { prolistGet } from "../../api/api";
+import { dataGet } from "../../api/api";
+import { momentsGet } from "../../api/api";
 import qiniu from "../../api/qiniu";
 
 export default {
@@ -121,7 +166,7 @@ export default {
         token: qiniu.token
       },
       upurl: qiniu.upurl,
-
+select: 1,
       currentPage: 1,
       list: [],
       count: 0,
@@ -139,7 +184,17 @@ export default {
       editId: "",
       delId: "",
       link: "",
-
+      adv_list: [
+        { key: 1, value: "产品" },
+        { key: 2, value: "项目" },
+        { key: 3, value: "动态" },
+        { key: 4, value: "资料" },
+        { key: 5, value: "外部链接" }
+      ],
+      adv_type: "",
+language: [{ key: 1, value: "中文" }, { key: 2, value: "英文" }],
+pro_list: [],
+      pro_id: "",
       goodData: [],
 
       checkper1: false,
@@ -154,18 +209,44 @@ export default {
 
   methods: {
     getlist() {
-      var allParams = "?page=" + this.currentPage + "&limit=" + this.limit;
+      var allParams = "?page=" + this.currentPage + "&limit=" + this.limit+ "&language="+this.select;;
       BannersGet(allParams).then(res => {
         this.list = res.data.data;
         this.count = res.data.count;
       });
     },
-
+getLag(index) {
+      this.select = index;
+      this.getlist();
+    },
     handleSelect(index, row) {
       this.group_id = row.id;
       var grouplist = [];
       grouplist.push(row);
       this.grouplist = grouplist;
+    },
+    getPro() {
+      this.pro_id = "";
+      let allParams =
+        "?page=" + this.currentPage + "&limit=1000" + "&language=1";
+      if (this.adv_type == 1) {
+        listGet(allParams).then(res => {
+          this.pro_list = res.data.data;
+        });
+      } else if (this.adv_type == 2) {
+        prolistGet(allParams).then(res => {
+          this.pro_list = res.data.data;
+        });
+      } else if (this.adv_type == 3) {
+        momentsGet(allParams).then(res => {
+          this.pro_list = res.data.data;
+        });
+      } else if (this.adv_type == 4) {
+        
+        dataGet(allParams).then(res => {
+          this.pro_list = res.data.data;
+        });
+      }
     },
 
     newone() {
@@ -194,16 +275,22 @@ export default {
             href: this.imgSrc,
             link: this.link,
             id: this.editId,
-            group_id: this.group_id
+            // group_id: this.group_id,
+            type:this.adv_type,
+            language:this.select,
+            param:this.pro_id
           };
         } else {
           var allParams = {
             href: this.imgSrc,
             group_id: this.group_id,
-            link: this.link
+            link: this.link,
+            type:this.adv_type,
+            language:this.select,
+            param:this.pro_id
           };
         }
-
+        // console.log(allParams);
         BannerPost(allParams).then(res => {
           if (res.msg === "ok") {
             this.$message({
@@ -232,6 +319,10 @@ export default {
       this.postarr = [];
       this.imgSrc = row.href;
       this.link = row.link;
+      this.adv_type = row.type;
+      this.select = row.language;
+      this.pro_id = row.param;
+
       this.postarr.push(Object.assign({}, { url: row.href }));
     },
 

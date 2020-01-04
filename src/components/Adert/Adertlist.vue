@@ -220,7 +220,7 @@ export default {
   methods: {
     getlist() {
       var allParams =
-        "?page=" + this.currentPage + "&limit=" + this.limit + "&language=1";
+        "?page=" + this.currentPage + "&limit=" + this.limit + "&language="+this.select;
       AdvertsGet(allParams).then(res => {
         console.log(res.data.data);
         this.list = res.data.data;
@@ -236,7 +236,7 @@ export default {
     getPro() {
       this.pro_id = "";
       let allParams =
-        "?page=" + this.currentPage + "&limit=" + this.limit + "&language=1";
+        "?page=" + this.currentPage + "&limit=1000" + "&language=1";
       if (this.adv_type == 1) {
         listGet(allParams).then(res => {
           this.pro_list = res.data.data;
@@ -301,7 +301,7 @@ export default {
             type: this.adv_type,
             href: this.imgSrc,
             language: this.select,
-            param: this.pro,
+            param: this.pro_id,
             link: this.link
           };
         }
