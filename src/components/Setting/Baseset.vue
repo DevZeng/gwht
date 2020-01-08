@@ -63,7 +63,7 @@
               placeholder="请输入标题"
               style="margin-top:10px;width: 300px;display: block;"
             ></el-input>
-            <el-button type="primary" class="postbtn" size="small" @click="savebg()">提交</el-button>
+            <el-button type="primary" class="postbtn" size="small" @click="savewe()">提交</el-button>
           </el-tab-pane>
 
           <el-tab-pane label="Instagram" name="sharebg">
@@ -131,18 +131,37 @@
                 style="width:200px;height:200px;border:1px dashed #ccc;border-radius:6px;display: block;margin-top: 1px;"
               />
             </el-upload>
+            </el-form-item>
+            <el-form-item label="中文标题：" >
             <el-input
             v-model="all_title"
               placeholder="请输入标题"
               style="margin-top:10px;width: 300px;display: block;"
             ></el-input>
-
+            </el-form-item>
+            <el-form-item label="中文内容：" >
             <el-input
             
               type="textarea"
               :rows="3"
               placeholder="请输入内容"
               v-model="all_content">
+            </el-input>
+              </el-form-item>
+              <el-form-item label="英文标题：" >
+            <el-input
+            v-model="en_title"
+              placeholder="请输入标题"
+              style="margin-top:10px;width: 300px;display: block;"
+            ></el-input>
+            </el-form-item>
+            <el-form-item label="英文内容：" >
+            <el-input
+            
+              type="textarea"
+              :rows="3"
+              placeholder="请输入内容"
+              v-model="en_content">
             </el-input>
               </el-form-item>
 
@@ -257,7 +276,9 @@ export default {
       new_bg: "",
       all_content:"",
       all_title:"",
-      switch: 0
+      switch: 0,
+      en_title:"",
+      en_content:""
     };
   },
 
@@ -287,7 +308,7 @@ export default {
       this.loginbg = qiniu.showurl + res.key;
     },
 
-    savebg() {
+    savewe() {
       var allParams = {
         wechat_title: this.wechat_title,
         wechat_bg: this.wechat_bg
@@ -406,7 +427,9 @@ export default {
         test_bg: this.test_bg,
         new_bg:this.new_bg,
         all_title:this.all_title,
-        all_content:this.all_content
+        all_content:this.all_content,
+        en_title:this.en_title,
+        en_content:this.en_content
       };
       baseset(allParams).then(res => {
         if (res.msg === "ok") {
@@ -459,6 +482,8 @@ export default {
             : "../static/images/default.png";
             this.all_title = res.data.all_title ? res.data.all_title : "";
             this.all_content = res.data.all_content ? res.data.all_content : "";
+            this.en_title = res.data.en_title ? res.data.en_title : "";
+            this.en_content = res.data.en_content ? res.data.en_content : "";
         } else {
           this.$message({
             message: res.msg,
