@@ -135,7 +135,7 @@
 import { typeGet } from "../../api/api";
 import { dataTypeGet } from "../../api/api";
 import { dataTypePost } from "../../api/api";
-import { typeDel } from "../../api/api";
+import { dataTypeDel } from "../../api/api";
 import { setDataTypeSort } from "../../api/api";
 import qiniu from "../../api/qiniu";
 
@@ -324,7 +324,8 @@ export default {
             title: this.newadv.title,
             id: this.editId,
             href: this.imgSrc,
-            description: this.newadv.desc
+            description: this.newadv.desc,
+            language: this.select
           };
         } else {
           var allParams = {
@@ -369,6 +370,9 @@ export default {
       this.newadv.title = row.title;
       this.newadv.desc = row.description;
       this.type_id = row.parent_id;
+      this.newadv.icon = row.href;
+      this.imgSrc = row.href;
+      this.select = row.language;
     },
 
     handleDelete(index, row) {
@@ -379,7 +383,7 @@ export default {
     submitdel() {
       this.dialogDelVisible = false;
       var allParams = "?id=" + this.delId;
-      typeDel(allParams).then(res => {
+      dataTypeDel(allParams).then(res => {
         if (res.msg === "ok") {
           this.$message({
             message: "删除成功",

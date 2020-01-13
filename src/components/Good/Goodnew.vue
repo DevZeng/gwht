@@ -131,7 +131,16 @@
           >新增规格</el-button>
         </el-form-item>
 
-        <el-form-item label="规格图片" prop="pictures">
+        <el-form-item label="规格补充：" prop="category_text">
+          <el-input
+            v-model="category_text"
+            placeholder="请输入规格补充（20字以内）"
+            maxlength="20"
+            style="width:500px;"
+          ></el-input>
+        </el-form-item>
+
+        <!-- <el-form-item label="规格图片" prop="pictures">
           <el-upload
             class="upload-demo"
             :action="upurl"
@@ -147,7 +156,7 @@
               style="width:146px;height:146px;border:1px dashed #ccc;border-radius:6px;display: block;margin-top: 1px;"
             />
           </el-upload>
-        </el-form-item>
+        </el-form-item> -->
 
         <el-form-item label="区域：">
           <div v-for="(item, index) in areas" :key="index">
@@ -283,7 +292,7 @@ export default {
         language: "",
         parameter: [],
         products: [],
-
+category_text:"其他规格尺寸和厚度可根据要求定制",
         pro_id: []
       },
       areas: [],
@@ -292,6 +301,7 @@ export default {
       images: "",
       categories: [],
       groupid: "",
+      category_text:"其他规格尺寸和厚度可根据要求定制",
 
       rules: {
         title: [{ required: true, message: "请输入产品标题", trigger: "blur" }],
@@ -444,6 +454,7 @@ export default {
         material: this.newone.material,
         categories: this.categories,
         category_cover: this.category_cover,
+        category_text:this.category_text,
         areas: this.areas,
         parameter: parameter,
         pictures: image,
@@ -488,6 +499,7 @@ export default {
           this.categories = res.data.categories;
           this.parent_id = res.data.parent_id;
           this.newone.pro_id = res.data.similar_id;
+          this.category_text = res.data.category_text;
           // console.log(res.data.areas);
           // 处理区域
           var area = [];

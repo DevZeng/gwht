@@ -104,7 +104,7 @@
               accept="image/*"
             >
               <img
-                :src="nedoc.cover"
+                :src="imgSrc"
                 style="width:146px;height:146px;border:1px dashed #ccc;border-radius:6px;margin-top: 1px;"
               />
             </el-upload>
@@ -224,7 +224,7 @@ export default {
         parameter: []
       },
       language: [{ key: 1, value: "中文" }, { key: 2, value: "英文" }],
-
+      imgSrc: "../static/images/default.png",
       select: 1,
       rules: {
         title: [{ required: true, trigger: "blur", message: "请输入文档标题" }],
@@ -278,6 +278,7 @@ export default {
     handleSuccess(res, file) {
       this.nedoc.cover = "";
       this.nedoc.cover = this.host + res.data.base_url;
+      this.imgSrc = this.host + res.data.base_url;
       // this.cover = this.host + res.data.base_url;
       console.log(this.nedoc.cover);
     },
@@ -346,6 +347,7 @@ export default {
 
     newone() {
       this.putorup = "up";
+      this.imgSrc = "../static/images/default.png",
       (this.diatitle = "新增文档"),
         (this.dialogNewVisible = true),
         (this.nedoc = {
@@ -361,6 +363,7 @@ export default {
       this.editId = row.id;
       this.type_id = row.type_id;
       var excal = [];
+      this.imgSrc = row.cover;
       excal.push({
         name: row.file_link,
         url: row.file_link

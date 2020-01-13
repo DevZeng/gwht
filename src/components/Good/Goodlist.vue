@@ -37,11 +37,11 @@
           </template>
         </el-table-column>
         <el-table-column prop="material" label="主要材料" min-width="80" align="center"></el-table-column>
-        <el-table-column prop="category_cover" label="规模图" min-width="80" align="center">
+        <!-- <el-table-column prop="category_cover" label="规模图" min-width="80" align="center">
           <template slot-scope="scope">
             <img :src="scope.row.category_cover" style="max-width:50px;max-height:50px;" />
           </template>
-        </el-table-column>
+        </el-table-column> -->
 
         <!-- <el-table-column label="排序" min-width="150" align="center">
           <template slot-scope="scope">
