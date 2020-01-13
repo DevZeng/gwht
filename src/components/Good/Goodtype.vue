@@ -374,7 +374,8 @@ export default {
             id: this.editId,
             icon: this.imgSrc,
             description: this.newadv.desc,
-            parent_id: this.type_id
+            parent_id: this.type_id,
+            language: this.select
           };
         } else {
           var allParams = {
@@ -420,6 +421,7 @@ export default {
       this.newadv.title = row.title;
       this.newadv.desc = row.description;
       this.type_id = row.parent_id;
+      this.select = row.language
     },
 
     handleDelete(index, row) {
