@@ -294,6 +294,7 @@ export default {
 
     getLag(index) {
       this.select = index;
+      this.getTypelist(index)
       this.getlist();
     },
 
@@ -308,9 +309,9 @@ export default {
         this.$message.error("图片插入失败");
       }
     },
-    getTypelist() {
+    getTypelist(language) {
       // import { dataTypeGet } from "../../api/api";
-      var allParams = "?page=" + 1 + "&limit=" + 1000;
+      var allParams = "?page=" + 1 + "&limit=" + 1000+"&language="+language;
       dataTypeGet(allParams).then(res => {
         this.typeArr = res.data.data;
       });
