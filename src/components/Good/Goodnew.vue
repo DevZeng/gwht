@@ -316,10 +316,11 @@ category_text:"其他规格尺寸和厚度可根据要求定制",
     // 获取语言分类
     getLag(index, value) {
       this.select = index;
+      this.gettype(2);
     },
     // 获取分类的数据
-    gettype() {
-      var allParams = "?page=1&limit=999";
+    gettype(language) {
+      var allParams = "?page=1&limit=999&language="+language;
       typeGet(allParams).then(res => {
         this.typeArr = res.data.data;
       });
@@ -546,7 +547,7 @@ category_text:"其他规格尺寸和厚度可根据要求定制",
     }
   },
   mounted: function() {
-    this.gettype();
+    this.gettype(1);
     this.checkid();
     this.getProduct();
   }
