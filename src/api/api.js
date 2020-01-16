@@ -109,6 +109,8 @@ export const upload = params => { return axios.post(`${base}/product`, params).t
 
 export const setProductSort = params => { return axios.post(`${base}/product/sort`, params).then(res => res.data) }
 
+export const setProductNewer = params => { return axios.post(`${base}/product/newer`, params).then(res => res.data) }
+
 // 获取全部项目
 export const prolistGet = params => { return axios.get(`${base}/projects` + `${params}`).then(res => res.data) }
 

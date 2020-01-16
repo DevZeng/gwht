@@ -13,7 +13,7 @@
     <el-col :span="24" class="warp-main">
       <el-form
         label-width="130px"
-        width="900px"
+        width="901px"
         center
         style="width: 1000px"
         :rules="rules"
@@ -134,8 +134,7 @@
         <el-form-item label="规格补充：" prop="category_text">
           <el-input
             v-model="category_text"
-            placeholder="请输入规格补充（20字以内）"
-            maxlength="20"
+            placeholder="请输入规格补充"
             style="width:500px;"
           ></el-input>
         </el-form-item>
@@ -338,7 +337,7 @@ category_text:"其他规格尺寸和厚度可根据要求定制",
       });
     },
     getProduct() {
-      var allParams = "?page=1&limit=10&language=" + this.select;
+      var allParams = "?page=1&limit=10000&language=" + this.select;
       listGet(allParams).then(res => {
         if (res.msg === "ok") {
           this.newone.products = [];
@@ -561,4 +560,5 @@ category_text:"其他规格尺寸和厚度可根据要求定制",
   height: 600px;
   margin-bottom: 70px;
 }
+
 </style>

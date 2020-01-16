@@ -219,7 +219,7 @@ export default {
 
     // 获取产品信息
     getProduct() {
-      var allParams = "?page=1&limit=10&language=" + this.select;
+      var allParams = "?page=1&limit=10000&language=" + this.select;
       listGet(allParams).then(res => {
         if (res.msg === "ok") {
           this.newone.products = [];

@@ -26,6 +26,38 @@
             ></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="产品类型：" prop="type_id" style="margin-left:20px">
+          <el-select v-model="type_id" placheolder="请选择类型" @change="getChild">
+            <el-option
+              v-for="item in type"
+              :label="item.title"
+              :value="item.id"
+              :key="item.id"
+            ></el-option>
+          </el-select>
+          <el-select v-model="childtype_id" placheolder="请选择类型" @change="setType">
+            <el-option
+              v-for="item in childtype"
+              :label="item.title"
+              :value="item.id"
+              :key="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="是否新品：" prop="newset" style="margin-left:20px">
+          <el-select v-model="newset" placheolder="请选择" @change="setNewer">
+            <el-option
+              v-for="item in newer"
+              :label="item.value"
+              :value="item.key"
+              :key="item.key"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" size="small" @click="getlist">搜索</el-button>
+          <el-button size="small" @click="clear">清空</el-button>
+        </el-form-item>
       </el-form>
 
       <el-table :data="list" border stripe style="width:1650px" size="small">
@@ -100,6 +132,12 @@
           <!-- <div v-if="scope.row.sort">{{scope.row.sort}}</div> -->
         </template>
       </el-table-column>
+      <el-table-column prop="title" label="新品" min-width="100" align="center">
+     <template slot-scope="scope">
+      <el-button type="success" size="mini" v-show="scope.row.newer==1" @click="changestate(scope.row)">是</el-button>
+      <el-button type="info" size="mini" v-show="scope.row.newer==2" @click="changestate(scope.row)">否</el-button>
+    </template>
+  </el-table-column>
         <el-table-column label="操作" min-width="140" align="center">
           <template slot-scope="scope">
             <el-button type="primary" size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
@@ -138,7 +176,9 @@ import { listGet } from "../../api/api";
 import { listDel } from "../../api/api";
 import { setProductSort } from "../../api/api";
 import { Message } from "element-ui";
-
+import { typeGet } from "../../api/api";
+import { typeAllGet } from "../../api/api";
+import { setProductNewer } from "../../api/api";
 export default {
   data() {
     return {
@@ -151,7 +191,13 @@ export default {
       language: [{ key: 1, value: "中文" }, { key: 2, value: "英文" }],
       select: 1,
       editId: "",
-      delId: ""
+      delId: "",
+      type_id:"",
+      type:[],
+      childtype:[],
+      childtype_id:"",
+      newer: [{ key: 1, value: "是" }, { key: 2, value: "否" }],
+      newset:""
     };
   },
 
@@ -169,6 +215,12 @@ export default {
       });
       // console.log(this.newone.parameter);
     },
+    gettype(language) {
+      var allParams = "?page=1&limit=999&language="+language;
+      typeGet(allParams).then(res => {
+        this.type = res.data.data;
+      });
+    },
     changeSort(id,val){
       console.log(id)
       console.log(val)
@@ -177,6 +229,7 @@ export default {
         id: id,
         sort:val
       };
+      
 
       // 发送到数据库里面去
       setProductSort(allParams).then(res => {
@@ -203,7 +256,9 @@ export default {
         "&limit=" +
         this.limit +
         "&language=" +
-        this.select;
+        this.select +
+        "&type_id=" + this.childtype_id+"&newer="+this.newset
+        console.log(allParams);
       listGet(allParams).then(res => {
         console.log(res);
         this.list = res.data.data;
@@ -211,9 +266,44 @@ export default {
       });
     },
 
+    changestate(index){
+     var allParams = {
+        id: index.id
+      };
+     console.log(allParams);
+     setProductNewer(allParams).then((res) => {
+       this.getlist();
+     });
+   },
+
     getLag(index) {
+      
       this.select = index;
-      this.getlist();
+      // this.getlist();
+      this.gettype(index);
+      
+    },
+    clear(){
+this.childtype_id = "";
+      this.type_id = "";
+      this.newset = "";
+    },
+    setType(type){
+      this.childtype_id = type;
+      // this.getlist();
+    },
+    setNewer(index){
+      this.newset = index;
+    },
+    getChild(index, value) {
+      // console.log(index);
+      // console.log(this.typeArr);
+      var parent_id = this.type_id;
+      // console.log(this.parent_id);
+      var allParams = "?page=1&&limit=999&&parent_id=" + parent_id;
+      typeGet(allParams).then(res => {
+        this.childtype = res.data.data;
+      });
     },
     // 排序确定功能
     // changesort(row) {
@@ -334,6 +424,7 @@ export default {
 
   mounted: function() {
     this.getlist();
+    this.gettype(1);
   }
 };
 </script>
