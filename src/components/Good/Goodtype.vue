@@ -184,7 +184,7 @@
 import { typeGet } from "../../api/api";
 import { typeAllGet } from "../../api/api";
 import { typePost } from "../../api/api";
-import { dataTypeDel } from "../../api/api";
+import { typeDel } from "../../api/api";
 import { setTypeSort } from "../../api/api";
 import qiniu from "../../api/qiniu";
 
@@ -432,7 +432,7 @@ export default {
     submitdel() {
       this.dialogDelVisible = false;
       var allParams = "?id=" + this.delId;
-      dataTypeDel(allParams).then(res => {
+      typeDel(allParams).then(res => {
         if (res.msg === "ok") {
           this.$message({
             message: "删除成功",

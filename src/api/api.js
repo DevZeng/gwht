@@ -369,3 +369,17 @@ export const posterGet = params => { return axios.get(`${base}/poster/configs` +
 
 
 export const tuisongPost = params => { return axios.post(`${base}/notify/queue`, params).then(res => res.data) }
+
+
+//实验品
+export const experimentConfigset = params => { return axios.post(`${base}/experiment/config`, params).then(res => res.data) }
+
+export const experimentConfigget = params => { return axios.get(`${base}/experiment/config` + `${params}`).then(res => res.data) }
+
+export const experimentAdd = params => { return axios.post(`${base}/experiment`, params).then(res => res.data) }
+
+export const experimentGet = params => { return axios.get(`${base}/experiments` + `${params}`).then(res => res.data) }
+
+export const experimentSortAdd = params => { return axios.post(`${base}/experiment/sort`, params).then(res => res.data) }
+
+export const experimentDel = params => { return axios.get(`${base}/del/experiment` + `${params}`).then(res => res.data) }

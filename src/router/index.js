@@ -45,6 +45,9 @@ import DataType from '@/components/Data/DataType'
 import Adert from '@/components/Adert/Adertlist'
 import AdertType from '@/components/Adert/Aderttype'
 
+import Expset from '@/components/Experiment/Expset'
+import Explist from '@/components/Experiment/Explist'
+
 const Login = resolve => require(['@/components/Login'], resolve)
 
 Vue.use(Router)
@@ -82,6 +85,19 @@ let router = new Router({
             iconCls: 'iconfont menu-good',
             children: [
                 { path: '/Good/Goodtype', component: Goodtype, name: '产品分类', menuShow: true, meta: { permission: '' } },
+            ]
+        },
+        {
+            // leaf: true,
+            path: '/',
+            name: '实验品',
+            component: Home,
+            redirect: '/Experiment/Expset',
+            menuShow: true,
+            iconCls: 'iconfont menu-good',
+            children: [
+                { path: '/Experiment/Expset', component: Expset, name: '基本设置', menuShow: true, meta: { permission: '' } },
+                { path: '/Experiment/Explist', component: Explist, name: '实验品管理', menuShow: true, meta: { permission: '' } },
             ]
         },
         {
