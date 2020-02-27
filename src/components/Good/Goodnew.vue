@@ -316,6 +316,7 @@ category_text:"其他规格尺寸和厚度可根据要求定制",
     getLag(index, value) {
       this.select = index;
       this.gettype(index);
+      this.getProduct(index);
     },
     // 获取分类的数据
     gettype(language) {
